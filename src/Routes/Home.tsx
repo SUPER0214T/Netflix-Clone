@@ -1,12 +1,30 @@
-import { AnimatePresence, motion, Variants } from 'framer-motion';
+import {
+	AnimatePresence,
+	motion,
+	useViewportScroll,
+	Variants,
+} from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getMovies, IGetMoviesResult } from '../api';
+import {
+	getMovies,
+	getMovieVideoData,
+	getMovieVideoURL,
+	IGetMoviesResult,
+	IGetMovieVideo,
+} from '../api';
 import { makeImagePath } from '../utils';
-import { debounce, throttle } from 'lodash';
+import { throttle } from 'lodash';
+import { Route, Routes, useMatch, useNavigate } from 'react-router-dom';
+import Modal from '../Components/Modal';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+	position: relative;
+	overflow: hidden;
+	height: 200vh;
+	background-color: black;
+`;
 
 const Loader = styled.div`
 	height: 50vh;
@@ -50,7 +68,9 @@ const OverView = styled.p`
 	text-shadow: 2px 2px 4px rgb(0 0 0 / 45%);
 `;
 
-const Slider = styled.div``;
+const Slider = styled.div`
+	position: relative;
+`;
 
 const Row = styled(motion.div)<{ gridcolumns: number }>`
 	display: grid;
@@ -59,16 +79,18 @@ const Row = styled(motion.div)<{ gridcolumns: number }>`
 	margin-bottom: 5px;
 	position: absolute;
 	width: 100%;
+	height: 20vh;
+	padding: 5px;
 `;
 
 const Box = styled(motion.div)<{ bgimagepath: string }>`
 	background-color: #fff;
-	height: 200px;
 	border-radius: 0.2vw;
 	background-image: url(${(props) => props.bgimagepath});
 	background-position: center center;
 	background-size: cover;
 	background-repeat: no-repeat;
+	cursor: pointer;
 
 	&:first-child {
 		transform-origin: left;
@@ -78,6 +100,62 @@ const Box = styled(motion.div)<{ bgimagepath: string }>`
 		transform-origin: right;
 	}
 `;
+
+const BoxInfo = styled(motion.div)`
+	position: absolute;
+	padding: 20px;
+	background-color: ${(props) => props.theme.black.darker};
+	bottom: -50%;
+	width: 100%;
+	height: 50%;
+	opacity: 0;
+`;
+
+const MovieModalWrapper = styled(motion.div)`
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow-y: scroll;
+`;
+
+const MovieModal = styled(motion.div)`
+	position: absolute;
+	width: 850px;
+	height: 200vh;
+	z-index: 100;
+	background-color: black;
+	overflow-y: scroll;
+	border-radius: 6px;
+
+	@media screen and (max-width: 850px) {
+		width: 95%;
+	}
+`;
+
+const Overlay = styled(motion.div)`
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	z-index: 3;
+`;
+
+const ModalCover = styled.div``;
+
+const ModalImg = styled.div`
+	width: 100%;
+	img {
+		width: 100%;
+	}
+`;
+
+const ModalTitle = styled.h2``;
 
 // Variants
 const sliderVariants: Variants = {
@@ -99,24 +177,46 @@ const boxVariants: Variants = {
 	},
 };
 
+const boxInfoVariants: Variants = {
+	hover: {
+		transition: {
+			delay: 0.35,
+			type: 'tween',
+			duration: 0.2,
+		},
+		opacity: 1,
+	},
+};
+
+/* Home Component */
 function Home() {
 	const [sliderIndex, setSliderIndex] = useState(0);
 	const [sliderLimit, setSliderLimit] = useState(false);
+	const [overlayOpen, setOverlayOpen] = useState(false);
 	const [offset, setOffset] = useState(6);
+	const navigate = useNavigate();
+	const { scrollY } = useViewportScroll();
+
+	const movieMatch = useMatch('/movies/:movieId');
 
 	const { data, isLoading } = useQuery<IGetMoviesResult>(
 		['movies', 'nowPlaying'],
 		getMovies
 	);
 
+	// const { data: videoData, isLoading: videoDataLoading } =
+	// 	useQuery<IGetMovieVideo>(['movies2', 'videoData'], () =>
+	// 		getMovieVideoData(Number(movieMatch?.params.movieId))
+	// 	);
+
+	// overlay가 open -> 새로운 모달이 열렸다. -> overlay가 open일 때 데이터를 받아오자
+
 	const increaseSliderIndex = () => {
 		if (sliderLimit) return;
 		setSliderLimit(true);
-		console.log(1234);
 		if (data) {
 			const totalMovies = data?.results.length;
-			const maxIndex = Math.floor(totalMovies / offset);
-			console.log(offset);
+			const maxIndex = Math.floor(totalMovies / offset) - 1;
 			setSliderIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
 		}
 	};
@@ -126,7 +226,6 @@ function Home() {
 	};
 
 	const handleResize = throttle(() => {
-		console.log(window.outerWidth);
 		if (window.outerWidth >= 1400) {
 			setOffset(6);
 		} else if (window.outerWidth >= 1100) {
@@ -147,6 +246,28 @@ function Home() {
 		};
 	}, []);
 
+	const onBoxClick = (movieId: number) => {
+		navigate(`/movies/${movieId}`);
+	};
+
+	const onOverlayClick = () => {
+		navigate(`/`);
+		setOverlayOpen(false);
+	};
+
+	const clickedMovie = data?.results.find((movie) => {
+		if (!movieMatch) return 1;
+		return movie.id + '' === movieMatch.params.movieId;
+	});
+
+	useEffect(() => {
+		if (overlayOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'unset';
+		}
+	}, [overlayOpen]);
+
 	return (
 		<>
 			<Wrapper>
@@ -165,35 +286,63 @@ function Home() {
 						</Info>
 					</Banner>
 				)}
+
+				<Slider>
+					<AnimatePresence initial={false} onExitComplete={toggleSliderLimit}>
+						<Row
+							variants={sliderVariants}
+							initial={{ x: window.outerWidth }}
+							animate={{ x: 0 }}
+							exit={{ x: -window.outerWidth }}
+							transition={{ type: 'tween', duration: 0.75 }}
+							key={sliderIndex}
+							gridcolumns={offset}
+						>
+							{data?.results
+								.slice(sliderIndex * offset, sliderIndex * offset + offset)
+								.map((movie) => (
+									<Box
+										key={movie.id + ''}
+										bgimagepath={makeImagePath(
+											movie.backdrop_path || movie.poster_path
+										)}
+										variants={boxVariants}
+										initial="normal"
+										whileHover="hover"
+										transition={{ type: 'tween' }}
+										onClick={() => {
+											onBoxClick(movie.id);
+											setOverlayOpen(true);
+										}}
+										// layoutId={movie.id + ''}
+									>
+										{/* BoxInfo에도 whileHover가 들어간다. */}
+										<BoxInfo variants={boxInfoVariants}>{movie.title}</BoxInfo>
+									</Box>
+								))}
+						</Row>
+					</AnimatePresence>
+				</Slider>
+
+				{movieMatch ? (
+					<>
+						<AnimatePresence>
+							<Overlay
+								onClick={onOverlayClick}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+							/>
+						</AnimatePresence>
+						{overlayOpen ? (
+							data ? (
+								<Modal data={data} />
+							) : (
+								<h1>Loading...</h1>
+							)
+						) : null}
+					</>
+				) : null}
 			</Wrapper>
-			<Slider>
-				<AnimatePresence initial={false} onExitComplete={toggleSliderLimit}>
-					<Row
-						variants={sliderVariants}
-						initial="hidden"
-						animate="visible"
-						exit="exit"
-						transition={{ type: 'tween', duration: 1 }}
-						key={sliderIndex}
-						gridcolumns={offset}
-					>
-						{data?.results
-							.slice(sliderIndex * offset, sliderIndex * offset + offset)
-							.map((movie) => (
-								<Box
-									key={movie.id + ''}
-									bgimagepath={makeImagePath(
-										movie.backdrop_path || movie.poster_path
-									)}
-									variants={boxVariants}
-									initial="normal"
-									whileHover="hover"
-									transition={{ type: 'tween' }}
-								></Box>
-							))}
-					</Row>
-				</AnimatePresence>
-			</Slider>
 		</>
 	);
 }

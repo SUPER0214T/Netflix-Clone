@@ -61,8 +61,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Noto Sans KR', sans-serif;
     color: ${(props) => props.theme.white.darker};
-    background-color: white;
-    height: 300vh
+    background-color: black;
   }
   a {
     text-decoration: none;

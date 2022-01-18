@@ -10,9 +10,10 @@ function App() {
 		<HashRouter>
 			<Header />
 			<Routes>
-				<Route path="/" element={Home} />
-				<Route path="/tv" element={Tv} />
-				<Route path="/search" element={Search} />
+				<Route path="/" element={<Home />} />
+				<Route path="/movies/:movieId" element={<Home />} />
+				<Route path="/tv" element={<Tv />} />
+				<Route path="/search" element={<Search />} />
 				<Route path="/*" element={<h1>존재하지 않는 페이지입니다.</h1>} />
 			</Routes>
 		</HashRouter>
