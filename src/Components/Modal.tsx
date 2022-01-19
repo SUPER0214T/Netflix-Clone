@@ -9,6 +9,7 @@ import {
 	IDetails,
 	IGetMoviesResult,
 	IGetMovieVideo,
+	IMovies,
 } from '../api';
 import { makeImagePath } from '../utils';
 
@@ -31,7 +32,7 @@ const MovieModal = styled.div`
 	background-color: black;
 	border-radius: 6px;
 	overflow: hidden;
-	height: auto;
+	min-height: 100vh;
 
 	@media screen and (max-width: 850px) {
 		width: 95%;
@@ -40,8 +41,34 @@ const MovieModal = styled.div`
 
 const ModalImg = styled.div`
 	width: 100%;
+	position: relative;
+
 	img {
 		width: 100%;
+		cursor: pointer;
+	}
+
+	.modal-image-gradient {
+		width: 100%;
+		height: 150px;
+		position: absolute;
+		bottom: 0;
+		background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+		pointer-events: none;
+	}
+
+	.modal-image-title {
+		position: absolute;
+		bottom: 20%;
+		padding: 0 48px;
+		pointer-events: none;
+
+		h2 {
+			font-size: 3vw;
+			font-weight: 700;
+			line-height: normal;
+			text-shadow: 2px 2px 4px rgb(0 0 0 / 45%);
+		}
 	}
 `;
 
@@ -182,40 +209,100 @@ const MovieInfoWrapper = styled.div`
 			}
 		}
 	}
-`;
 
-const ModalTitle = styled.h2``;
+	.video-wrapper {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		margin: 0 auto;
+		width: 100vw;
+		height: 100vh;
+
+		iframe {
+			width: 100%;
+			height: 100%;
+		}
+
+		button {
+			position: absolute;
+			left: 100px;
+			top: 100px;
+			background: red;
+			border-radius: 50%;
+			border: none;
+			cursor: pointer;
+			transition: transform 0.35s ease-in-out;
+
+			&:hover {
+				transform: scale(1.3);
+			}
+
+			svg {
+				width: 56px;
+				height: 56px;
+				border: none;
+				background: transparent;
+				color: white;
+			}
+		}
+	}
+`;
 
 function Modal(props: { data: IGetMoviesResult }) {
 	const [videoData, setVideoData] = useState<IGetMovieVideo>();
 	const [details, setDetails] = useState<IDetails>();
 	const { scrollY } = useViewportScroll();
 	const movieMatch = useMatch('/movies/:movieId');
+	const [videoOpen, setVideoOpen] = useState<null | string>(null);
+	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
 
-	const clickedMovie = props.data?.results.find((movie) => {
-		if (!movieMatch) return null;
-		return movie.id + '' === movieMatch.params.movieId;
-	});
+	// const clickedMovie = props.data?.results.find((movie) => {
+	// 	if (!movieMatch) return null;
+	// 	return movie.id + '' === movieMatch.params.movieId;
+	// });
+
+	useEffect(() => {
+		const clickedMovie = props.data?.results.find((movie) => {
+			if (!movieMatch) return null;
+			return movie.id + '' === movieMatch.params.movieId;
+		});
+		setClickedMovie(clickedMovie || null);
+	}, []);
 
 	useEffect(() => {
 		const getVideoDB = getMovieVideoData(Number(movieMatch?.params.movieId));
 		getVideoDB.then((result) => setVideoData(result));
-		console.log(videoData);
 
 		const getDetails = getMovieDetails(Number(movieMatch?.params.movieId));
 		getDetails.then((result) => setDetails(result));
 	}, []);
 
-	console.log(videoData);
 	return (
 		<MovieModalWrapper style={{ top: scrollY.get() }}>
 			<MovieModal>
-				<ModalImg>
-					<motion.img
-						src={makeImagePath(clickedMovie?.backdrop_path || '')}
-						alt="Modal Title Img"
-					/>
-					<ModalTitle>{clickedMovie?.title}</ModalTitle>
+				<ModalImg
+					onClick={() =>
+						setVideoOpen(() => {
+							if (videoData?.results[0]?.key) {
+								return videoData?.results[0]?.key || '';
+							} else {
+								alert('영상이 준비되지 않았습니다!');
+								return null;
+							}
+						})
+					}
+				>
+					<div>
+						<motion.img
+							src={makeImagePath(clickedMovie?.backdrop_path || '')}
+							alt="Modal Title Img"
+						/>
+					</div>
+					<div className="modal-image-gradient" />
+					<div className="modal-image-title">
+						<h2>{clickedMovie?.title}</h2>
+					</div>
 				</ModalImg>
 				<MovieInfoWrapper>
 					<div className="episode-info">
@@ -230,14 +317,11 @@ function Modal(props: { data: IGetMoviesResult }) {
 						<div className="episode-info-right">
 							<div className="tags">
 								<span className="tags-label">장르: </span>
-								<span className="tags-item">
-									어두운, 로맨스, 무서운, 재미있는, 한국 드라마 TOP10
-								</span>
-								<span className="tags-item">로맨스</span>
-								<span className="tags-item">무서운</span>
-								<span className="tags-item">재미있는</span>
-								<span className="tags-item">한국 드라마 TOP10</span>
-								{/* 장르 가져와서 map으로 돌린 후 <span className='tag-name'>{genres.genre.name}</span> */}
+								{details?.genres.map((genre) => (
+									<span key={genre.id} className="tags-item">
+										{genre.name}
+									</span>
+								))}
 							</div>
 						</div>
 					</div>
@@ -250,7 +334,11 @@ function Modal(props: { data: IGetMoviesResult }) {
 							{videoData?.results.length !== 0 ? (
 								videoData?.results.map((result, index) => {
 									return (
-										<div className="episodeSelector-card" key={result.id}>
+										<div
+											className="episodeSelector-card"
+											key={result.id}
+											onClick={() => setVideoOpen(result.key)}
+										>
 											<div className="card-index">{index + 1}</div>
 											<div className="card-image-wrapper">
 												<div className="card-image">
@@ -291,18 +379,38 @@ function Modal(props: { data: IGetMoviesResult }) {
 						</div>
 					</div>
 
-					{videoData ? (
-						<motion.iframe
-							width="100%"
-							height="500px"
-							src={getMovieVideoURL(videoData?.results[0]?.key || '')}
-							title="YouTube video player"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							className="videoPlayer"
-						></motion.iframe>
-					) : (
-						<h1>Loading...</h1>
-					)}
+					{videoOpen !== null ? (
+						videoData ? (
+							<div className="video-wrapper">
+								<motion.iframe
+									width="100%"
+									height="500px"
+									src={getMovieVideoURL(videoOpen || '')}
+									title="YouTube video player"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									className="videoPlayer"
+								></motion.iframe>
+								<button type="button" onClick={() => setVideoOpen(null)}>
+									<svg
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M11.707 6.707a1 1 0 00-1.414-1.414l-6 6a1 1 0 000 1.415l6 6a1 1 0 001.414-1.415L7.414 13H19a1 1 0 100-2H7.414l4.293-4.293z"
+											fill="currentColor"
+										></path>
+									</svg>
+								</button>
+							</div>
+						) : (
+							<h1>Loading...</h1>
+						)
+					) : null}
 				</MovieInfoWrapper>
 			</MovieModal>
 		</MovieModalWrapper>
