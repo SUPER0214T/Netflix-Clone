@@ -70,6 +70,42 @@ const OverView = styled.p`
 
 const Slider = styled.div`
 	position: relative;
+	min-height: 20vh;
+
+	.slider-button {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1;
+		width: 4%;
+		height: 100%;
+		background-color: rgba(20, 20, 20, 0.4);
+		cursor: pointer;
+
+		svg {
+			width: 100%;
+			height: 30%;
+		}
+
+		&:hover {
+			background-color: rgba(20, 20, 20, 0.6);
+		}
+	}
+
+	.slider-left {
+		left: 0;
+		top: 0;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+
+	.slider-right {
+		right: 0;
+		top: 0;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
 `;
 
 const Row = styled(motion.div)<{ gridcolumns: number }>`
@@ -99,6 +135,12 @@ const Box = styled(motion.div)<{ bgimagepath: string }>`
 	&:last-child {
 		transform-origin: right;
 	}
+
+	.box-info-wrapper {
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
 `;
 
 const BoxInfo = styled(motion.div)`
@@ -109,31 +151,8 @@ const BoxInfo = styled(motion.div)`
 	width: 100%;
 	height: 50%;
 	opacity: 0;
-`;
-
-const MovieModalWrapper = styled(motion.div)`
-	display: flex;
-	width: 100%;
-	height: 100%;
-	justify-content: center;
-	position: absolute;
-	top: 0;
-	left: 0;
-	overflow-y: scroll;
-`;
-
-const MovieModal = styled(motion.div)`
-	position: absolute;
-	width: 850px;
-	height: 200vh;
-	z-index: 100;
-	background-color: black;
-	overflow-y: scroll;
-	border-radius: 6px;
-
-	@media screen and (max-width: 850px) {
-		width: 95%;
-	}
+	visibility: hidden;
+	transition: visibility 0.35s ease-in-out;
 `;
 
 const Overlay = styled(motion.div)`
@@ -143,25 +162,20 @@ const Overlay = styled(motion.div)`
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
 	opacity: 0;
-	z-index: 3;
+	z-index: 30;
 `;
-
-const ModalCover = styled.div``;
-
-const ModalImg = styled.div`
-	width: 100%;
-	img {
-		width: 100%;
-	}
-`;
-
-const ModalTitle = styled.h2``;
 
 // Variants
 const sliderVariants: Variants = {
-	hidden: { x: window.outerWidth + 5 },
+	// hidden: { x: window.outerWidth + 5 },
+	hidden: (isBack: Boolean) => ({
+		x: isBack ? -window.outerWidth - 5 : window.outerWidth + 5,
+	}),
 	visible: { x: 0 },
-	exit: { x: -window.outerWidth - 5 },
+	// exit: { x: -window.outerWidth - 5 },
+	exit: (isBack: Boolean) => ({
+		x: isBack ? window.outerWidth + 5 : -window.outerWidth - 5,
+	}),
 };
 
 const boxVariants: Variants = {
@@ -169,6 +183,7 @@ const boxVariants: Variants = {
 	hover: {
 		scale: 1.3,
 		y: -50,
+		zIndex: 3,
 		transition: {
 			delay: 0.35,
 			duration: 0.2,
@@ -185,12 +200,14 @@ const boxInfoVariants: Variants = {
 			duration: 0.2,
 		},
 		opacity: 1,
+		visibility: 'visible',
 	},
 };
 
 /* Home Component */
 function Home() {
 	const [sliderIndex, setSliderIndex] = useState(0);
+	const [back, setBack] = useState(false);
 	const [sliderLimit, setSliderLimit] = useState(false);
 	const [overlayOpen, setOverlayOpen] = useState(false);
 	const [offset, setOffset] = useState(6);
@@ -215,9 +232,21 @@ function Home() {
 		if (sliderLimit) return;
 		setSliderLimit(true);
 		if (data) {
+			setBack(false);
 			const totalMovies = data?.results.length;
 			const maxIndex = Math.floor(totalMovies / offset) - 1;
 			setSliderIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+		}
+	};
+
+	const decreaseSliderIndex = () => {
+		if (sliderLimit) return;
+		setSliderLimit(true);
+		if (data) {
+			setBack(true);
+			const totalMovies = data?.results.length;
+			const maxIndex = Math.floor(totalMovies / offset) - 1;
+			setSliderIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
 		}
 	};
 
@@ -275,7 +304,6 @@ function Home() {
 					<Loader>로딩중...</Loader>
 				) : (
 					<Banner
-						onClick={increaseSliderIndex}
 						bgimagepath={makeImagePath(data?.results[0].backdrop_path || '')}
 					>
 						<Info>
@@ -288,15 +316,66 @@ function Home() {
 				)}
 
 				<Slider>
-					<AnimatePresence initial={false} onExitComplete={toggleSliderLimit}>
+					<div
+						className="slider-button slider-left"
+						onClick={decreaseSliderIndex}
+					>
+						<svg
+							aria-hidden="true"
+							focusable="false"
+							data-prefix="fas"
+							data-icon="chevron-left"
+							role="img"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 320 512"
+							className="chevron-left"
+						>
+							<path
+								fill="currentColor"
+								d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"
+							></path>
+						</svg>
+					</div>
+					<div
+						className="slider-button slider-right"
+						onClick={increaseSliderIndex}
+					>
+						<svg
+							aria-hidden="true"
+							focusable="false"
+							data-prefix="fas"
+							data-icon="chevron-right"
+							role="img"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 320 512"
+							className="chevron-right"
+						>
+							<path
+								fill="currentColor"
+								d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"
+							></path>
+						</svg>
+					</div>
+					<AnimatePresence
+						initial={false}
+						onExitComplete={toggleSliderLimit}
+						custom={back}
+					>
 						<Row
 							variants={sliderVariants}
-							initial={{ x: window.outerWidth }}
-							animate={{ x: 0 }}
-							exit={{ x: -window.outerWidth }}
+							initial="hidden"
+							animate="visible"
+							exit="exit"
+							// initial={{ x: back ? -window.outerWidth : window.outerWidth }}
+							// animate={{ x: 0 }}
+							// exit={{ x: back ? window.outerWidth : -window.outerWidth }}
+							// initial={{ x: window.outerWidth }}
+							// animate={{ x: 0 }}
+							// exit={{ x: -window.outerWidth }}
 							transition={{ type: 'tween', duration: 0.75 }}
 							key={sliderIndex}
 							gridcolumns={offset}
+							custom={back}
 						>
 							{data?.results
 								.slice(sliderIndex * offset, sliderIndex * offset + offset)
@@ -317,7 +396,11 @@ function Home() {
 										// layoutId={movie.id + ''}
 									>
 										{/* BoxInfo에도 whileHover가 들어간다. */}
-										<BoxInfo variants={boxInfoVariants}>{movie.title}</BoxInfo>
+										<div className="box-info-wrapper">
+											<BoxInfo variants={boxInfoVariants}>
+												{movie.title}
+											</BoxInfo>
+										</div>
 									</Box>
 								))}
 						</Row>
