@@ -22,6 +22,13 @@ const MovieModalWrapper = styled.div`
 	top: 0;
 	left: 0;
 	overflow-y: scroll;
+
+	.no-list {
+		line-height: 27px;
+		font-size: 18px;
+		font-weight: 400;
+		margin-bottom: 20px;
+	}
 `;
 
 const MovieModal = styled.div`
@@ -81,6 +88,15 @@ const MovieInfoWrapper = styled.div`
 		grid-gap: 32px;
 		margin-top: 18px;
 
+		&-overview-clamp {
+			text-decoration: underline;
+			color: #afafaf;
+			cursor: pointer;
+
+			&:hover {
+				opacity: 0.6;
+			}
+		}
 		&-left-release {
 			font-size: 16px;
 			font-weight: 700;
@@ -102,6 +118,13 @@ const MovieInfoWrapper = styled.div`
 				overflow-wrap: break-all;
 				font-size: 14px;
 				line-height: 20px;
+
+				&-item {
+					cursor: pointer;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
 
 				&-label {
 					color: #777;
@@ -133,6 +156,7 @@ const MovieInfoWrapper = styled.div`
 		}
 
 		.episodeSelector-cards {
+			margin-bottom: 30px;
 			.episodeSelector-card {
 				display: flex;
 				padding: 16px;
@@ -165,6 +189,8 @@ const MovieInfoWrapper = styled.div`
 						img {
 							display: block;
 							width: 100%;
+							height: 100%;
+							object-fit: cover;
 						}
 					}
 
@@ -189,10 +215,26 @@ const MovieInfoWrapper = styled.div`
 
 				.card-info {
 					flex: 0 0 70%;
-					font-size: 16px;
-					font-weight: 700;
 					overflow-wrap: break-word;
-					padding: 16px;
+					display: flex;
+					flex-direction: column;
+					justify-content: stretch;
+					height: 100%;
+
+					&-title {
+						padding: 16px;
+						font-size: 16px;
+						font-weight: 700;
+						padding-bottom: 8px;
+					}
+
+					&-overview {
+						padding: 14px;
+						padding-top: 0;
+						font-size: 14px;
+						line-height: 20px;
+						color: #d2d2d2;
+					}
 				}
 
 				&:first-child {
@@ -257,10 +299,15 @@ function Modal(props: { data: IGetMoviesResult }) {
 	const [videoOpen, setVideoOpen] = useState<null | string>(null);
 	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
 
-	// const clickedMovie = props.data?.results.find((movie) => {
-	// 	if (!movieMatch) return null;
-	// 	return movie.id + '' === movieMatch.params.movieId;
-	// });
+	function onClickOverviewAdd() {
+		const ovAdd: HTMLElement | null = document.querySelector(
+			'.episode-info-left-overview'
+		);
+		if (ovAdd !== null) {
+			console.log(1234);
+			ovAdd.style.webkitLineClamp = 'unset';
+		}
+	}
 
 	useEffect(() => {
 		const clickedMovie = props.data?.results.find((movie) => {
@@ -295,24 +342,48 @@ function Modal(props: { data: IGetMoviesResult }) {
 				>
 					<div>
 						<motion.img
-							src={makeImagePath(clickedMovie?.backdrop_path || '')}
+							src={makeImagePath(
+								clickedMovie?.backdrop_path ||
+									clickedMovie?.poster_path ||
+									details?.backdrop_path ||
+									details?.poster_path ||
+									''
+							)}
 							alt="Modal Title Img"
 						/>
 					</div>
 					<div className="modal-image-gradient" />
 					<div className="modal-image-title">
-						<h2>{clickedMovie?.title}</h2>
+						<h2>{clickedMovie?.title || details?.title}</h2>
 					</div>
 				</ModalImg>
 				<MovieInfoWrapper>
 					<div className="episode-info">
 						<div className="episode-info-left">
 							<div className="episode-info-left-release">
-								{clickedMovie?.release_date.substring(0, 4)}
+								{clickedMovie?.release_date.substring(0, 4) ||
+									details?.release_date.substring(0, 4)}
 							</div>
 							<div className="episode-info-left-overview">
-								{clickedMovie?.overview}
+								{clickedMovie?.overview || details?.overview}
 							</div>
+							{details?.overview ? (
+								details.overview.length > 102 ? (
+									<span
+										className="episode-info-overview-clamp"
+										onClick={(e) => {
+											e.currentTarget.style.display = 'none';
+											onClickOverviewAdd();
+										}}
+									>
+										...더보기
+									</span>
+								) : (
+									false
+								)
+							) : (
+								false
+							)}
 						</div>
 						<div className="episode-info-right">
 							<div className="tags">
@@ -344,7 +415,11 @@ function Modal(props: { data: IGetMoviesResult }) {
 												<div className="card-image">
 													<img
 														src={makeImagePath(
-															clickedMovie?.backdrop_path || ''
+															clickedMovie?.backdrop_path ||
+																clickedMovie?.poster_path ||
+																details?.backdrop_path ||
+																details?.poster_path ||
+																''
 														)}
 														alt="Card Img"
 													/>
@@ -366,7 +441,8 @@ function Modal(props: { data: IGetMoviesResult }) {
 												</div>
 											</div>
 											<div className="card-info">
-												<p>{result.name}</p>
+												<p className="card-info-title">{index + 1}화</p>
+												<p className="card-info-overview">{result.name}</p>
 											</div>
 										</div>
 									);
