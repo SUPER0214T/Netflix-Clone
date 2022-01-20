@@ -10,6 +10,7 @@ import {
 	IGetMoviesResult,
 	IGetMovieVideo,
 	IMovies,
+	ISearchResults,
 } from '../api';
 import { makeImagePath } from '../utils';
 
@@ -291,11 +292,12 @@ const MovieInfoWrapper = styled.div`
 	}
 `;
 
-function Modal(props: { data: IGetMoviesResult }) {
+function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 	const [videoData, setVideoData] = useState<IGetMovieVideo>();
 	const [details, setDetails] = useState<IDetails>();
 	const { scrollY } = useViewportScroll();
 	const movieMatch = useMatch('/movies/:movieId');
+	const searchMatch = useMatch('/search/:movieId');
 	const [videoOpen, setVideoOpen] = useState<null | string>(null);
 	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
 
@@ -311,17 +313,24 @@ function Modal(props: { data: IGetMoviesResult }) {
 
 	useEffect(() => {
 		const clickedMovie = props.data?.results.find((movie) => {
-			if (!movieMatch) return null;
-			return movie.id + '' === movieMatch.params.movieId;
+			if (!movieMatch || !searchMatch) return null;
+			return (
+				movie.id + '' === movieMatch.params.movieId ||
+				searchMatch.params.movieId
+			);
 		});
 		setClickedMovie(clickedMovie || null);
 	}, []);
 
 	useEffect(() => {
-		const getVideoDB = getMovieVideoData(Number(movieMatch?.params.movieId));
+		const getVideoDB = getMovieVideoData(
+			Number(movieMatch?.params.movieId || searchMatch?.params.movieId)
+		);
 		getVideoDB.then((result) => setVideoData(result));
 
-		const getDetails = getMovieDetails(Number(movieMatch?.params.movieId));
+		const getDetails = getMovieDetails(
+			Number(movieMatch?.params.movieId || searchMatch?.params.movieId)
+		);
 		getDetails.then((result) => setDetails(result));
 	}, []);
 
