@@ -1,10 +1,9 @@
-import { motion, useViewportScroll, Variants } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { motion, useViewportScroll } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { currentPathNumberAtom } from '../atoms';
-import { useCheckCurrentPathname } from '../functions';
+import { searchInputValueAtom, searchOpenAtom } from '../atoms';
 
 const Nav = styled(motion.nav)`
 	display: flex;
@@ -16,7 +15,14 @@ const Nav = styled(motion.nav)`
 	background-color: black;
 	height: 80px;
 	font-size: 12px;
-	padding: 20px 60px;
+	padding: 0 4%;
+	z-index: 2;
+	font-size: 14px;
+
+	@media screen and (max-width: 950px) {
+		height: 41px;
+		font-size: 10px;
+	}
 `;
 
 const Col = styled.div`
@@ -72,6 +78,7 @@ const Search = styled.span`
 	color: white;
 
 	svg {
+		cursor: pointer;
 		height: 25px;
 	}
 `;
@@ -119,17 +126,23 @@ const logoVariants = {
 };
 
 function Header() {
-	const [searchOpen, setSearchOpen] = useState(false);
+	const [searchOpen, setSearchOpen] = useRecoilState(searchOpenAtom);
 	const [isscrollZero, setIsScrollZero] = useState(true);
 	const { scrollY } = useViewportScroll();
+	const navigate = useNavigate();
+	const [inputVaule, setInputValue] = useRecoilState(searchInputValueAtom);
 
 	const openSearch = () => {
 		setSearchOpen((prev) => !prev);
 	};
 
 	const closeSearch = () => {
-		setSearchOpen(false);
+		console.log(inputVaule);
+		if (inputVaule === '' || inputVaule === null) {
+			setSearchOpen(false);
+		}
 	};
+
 	useEffect(() => {
 		if (searchOpen === true) {
 			const inputElement: HTMLElement = document.querySelector('input')!;
@@ -146,6 +159,16 @@ function Header() {
 			}
 		});
 	}, [scrollY]);
+
+	const onInputChange = (e: any) => {
+		console.log('onChange: ', e.target.value);
+		setInputValue(e.target.value);
+		if (e.target.value === '') {
+			navigate(`/`);
+		} else {
+			navigate(`/search?keyword=${e.target.value}`);
+		}
+	};
 
 	return (
 		<Nav
@@ -205,7 +228,9 @@ function Header() {
 						animate={{ scaleX: searchOpen ? 1 : 0 }}
 						transition={{ type: 'linear' }}
 						onBlur={closeSearch}
-						placeholder="제목, 사람, 장르"
+						placeholder="두 글자 이상"
+						onChange={onInputChange}
+						value={inputVaule}
 					/>
 				</Search>
 			</Col>

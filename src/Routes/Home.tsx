@@ -1,32 +1,25 @@
-import {
-	AnimatePresence,
-	motion,
-	useViewportScroll,
-	Variants,
-} from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import {
-	getMovies,
-	getMovieVideoData,
-	getMovieVideoURL,
-	IGetMoviesResult,
-	IGetMovieVideo,
-} from '../api';
+import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
-import { throttle } from 'lodash';
-import { Route, Routes, useMatch, useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import SliderComponent from '../Components/SliderComponent';
 import { useRecoilState } from 'recoil';
-import { overlayAtom } from '../atoms';
+import { overlayAtom, searchInputValueAtom, searchOpenAtom } from '../atoms';
 
 const Wrapper = styled.div`
 	position: relative;
 	overflow: hidden;
-	height: 200vh;
+	/* height: 200vh; */
 	background-color: black;
+
+	.slider-position {
+		position: relative;
+		top: -160px;
+	}
 `;
 
 const Loader = styled.div`
@@ -84,14 +77,18 @@ const Overlay = styled(motion.div)`
 /* Home Component */
 function Home() {
 	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
+	const [inputVaule, setInputValue] = useRecoilState(searchInputValueAtom);
+	const [searchOpen, setSearchOpen] = useRecoilState(searchOpenAtom);
 	const navigate = useNavigate();
-
 	const movieMatch = useMatch('/movies/:movieId');
+	const { data: dataPage01, isLoading: isData01Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page01'], () => getMovies(1));
 
-	const { data, isLoading } = useQuery<IGetMoviesResult>(
-		['movies', 'nowPlaying'],
-		getMovies
-	);
+	const { data: dataPage02, isLoading: isData02Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page02'], () => getMovies(2));
+
+	const { data: dataPage03, isLoading: isData03Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page03'], () => getMovies(3));
 
 	const onOverlayClick = () => {
 		navigate(`/`);
@@ -106,25 +103,36 @@ function Home() {
 		}
 	}, [overlayOpen]);
 
+	useEffect(() => {
+		setInputValue('');
+		setSearchOpen(false);
+	}, []);
+
 	return (
 		<>
 			<Wrapper>
-				{isLoading ? (
+				{isData01Loading ? (
 					<Loader>로딩중...</Loader>
 				) : (
 					<Banner
-						bgimagepath={makeImagePath(data?.results[0].backdrop_path || '')}
+						bgimagepath={makeImagePath(
+							dataPage01?.results[0].backdrop_path || ''
+						)}
 					>
 						<Info>
 							<div>
-								<Title>{data?.results[0].title}</Title>
-								<OverView>{data?.results[0].overview}</OverView>
+								<Title>{dataPage01?.results[0].title}</Title>
+								<OverView>{dataPage01?.results[0].overview}</OverView>
 							</div>
 						</Info>
 					</Banner>
 				)}
 
-				<SliderComponent data={data} />
+				<div className="slider-position">
+					<SliderComponent data={dataPage01} titleName="지금 뜨는 콘텐츠" />
+					<SliderComponent data={dataPage02} titleName="다시보기 추천 콘텐츠" />
+					<SliderComponent data={dataPage03} titleName="몰아보기 추천 시리즈" />
+				</div>
 
 				{movieMatch ? (
 					<>
@@ -136,8 +144,8 @@ function Home() {
 							/>
 						</AnimatePresence>
 						{overlayOpen ? (
-							data ? (
-								<Modal data={data} />
+							dataPage01 ? (
+								<Modal data={dataPage01} />
 							) : (
 								<h1>Loading...</h1>
 							)
