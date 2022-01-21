@@ -1,14 +1,17 @@
+import React from 'react';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { IGetMoviesResult } from '../api';
+import { IGetMoviesResult, ISearchResults } from '../api';
 import { overlayAtom } from '../atoms';
 import { makeImagePath } from '../utils';
 
 const SliderWrapper = styled.div`
+	margin: 3vw 0;
+
 	.slider-header-title {
 		color: #e5e5e5;
 		font-weight: 700;
@@ -70,20 +73,21 @@ const Row = styled(motion.div)<{ gridcolumns: number }>`
 `;
 
 const Box = styled(motion.div)<{ bgimagepath: string }>`
-	background-color: #fff;
-	border-radius: 0.2vw;
+	background-color: black;
+	border-top-left-radius: 0.2vw;
+	border-top-right-radius: 0.2vw;
 	background-image: url(${(props) => props.bgimagepath});
 	background-position: center center;
 	background-size: cover;
 	background-repeat: no-repeat;
 	cursor: pointer;
 
-	&:first-child {
-		transform-origin: left;
-	}
-
 	&:last-child {
 		transform-origin: right;
+	}
+
+	&:first-child {
+		transform-origin: left;
 	}
 
 	.box-info-wrapper {
@@ -96,13 +100,15 @@ const Box = styled(motion.div)<{ bgimagepath: string }>`
 const BoxInfo = styled(motion.div)`
 	position: absolute;
 	padding: 20px;
-	background-color: ${(props) => props.theme.black.darker};
-	bottom: -50%;
+	background-color: ${(props) => props.theme.black.veryDark};
+	bottom: calc(-50% + 1px);
 	width: 100%;
 	height: 50%;
 	opacity: 0;
 	visibility: hidden;
 	transition: visibility 0.35s ease-in-out;
+	border-bottom-right-radius: 0.2vw;
+	border-bottom-left-radius: 0.2vw;
 `;
 
 // Variants
@@ -142,8 +148,11 @@ const boxInfoVariants: Variants = {
 	},
 };
 
-function SliderComponent(props: { data: IGetMoviesResult | undefined }) {
-	const { data } = props;
+function SliderComponent(props: {
+	data: IGetMoviesResult | ISearchResults | undefined;
+	titleName?: string;
+}) {
+	const { data, titleName } = props;
 	const [sliderIndex, setSliderIndex] = useState(0);
 	const [back, setBack] = useState(false);
 	const [sliderLimit, setSliderLimit] = useState(false);
@@ -151,7 +160,7 @@ function SliderComponent(props: { data: IGetMoviesResult | undefined }) {
 	const navigate = useNavigate();
 	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
 
-	// functions
+	// Functions
 	const increaseSliderIndex = () => {
 		if (sliderLimit) return;
 		setSliderLimit(true);
@@ -206,7 +215,7 @@ function SliderComponent(props: { data: IGetMoviesResult | undefined }) {
 	return (
 		<SliderWrapper className="slider-wrapper">
 			<div className="slider-header-title">
-				<h2>지금 뜨는 콘텐츠</h2>
+				<h2>{titleName || '영화'}</h2>
 			</div>
 
 			<Slider>

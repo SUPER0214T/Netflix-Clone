@@ -128,9 +128,12 @@ function Tv() {
 						</Banner>
 
 						<div className="slider-position">
-							<TvSlider data={dataPage02} titleName="지금 뜨는 콘텐츠" />
-							<TvSlider data={dataPage01} titleName="다시보기 추천 콘텐츠" />
-							<TvSlider data={dataPage03} titleName="몰아보기 추천 시리즈" />
+							<TvSlider data={dataPage02} titleName="오직 넷플릭스에서" />
+							<TvSlider
+								data={dataPage01}
+								titleName="평단의 찬사를 받은 시리즈"
+							/>
+							<TvSlider data={dataPage03} titleName="" />
 						</div>
 					</>
 				)}
