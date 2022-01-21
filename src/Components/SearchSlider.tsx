@@ -9,7 +9,7 @@ import { makeImagePath } from '../utils';
 // Components
 const Slider = styled.div`
 	position: relative;
-	min-height: 20vh;
+	min-height: 11vw;
 	margin-bottom: 4vw;
 `;
 
@@ -20,7 +20,7 @@ const Row = styled(motion.div)<{ gridcolumns: number }>`
 	margin-bottom: 5px;
 	position: absolute;
 	width: 100%;
-	height: 20vh;
+	height: 11vw;
 	padding: 0 4%;
 `;
 

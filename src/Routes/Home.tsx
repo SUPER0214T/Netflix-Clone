@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 
 	.slider-position {
 		position: relative;
-		top: -160px;
+		top: -15vw;
 	}
 `;
 
@@ -32,7 +32,8 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ bgimagepath: string }>`
-	height: 100vh;
+	width: 100%;
+	height: 56.25vw;
 	background-color: red;
 	position: relative;
 	background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8)),
@@ -48,7 +49,7 @@ const Info = styled.div`
 	width: 35%;
 	position: absolute;
 	left: 4%;
-	bottom: 25%;
+	bottom: 38%;
 `;
 
 const Title = styled.h2`
