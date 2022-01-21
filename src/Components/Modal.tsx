@@ -308,7 +308,6 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 			'.episode-info-left-overview'
 		);
 		if (ovAdd !== null) {
-			console.log(1234);
 			ovAdd.style.webkitLineClamp = 'unset';
 		}
 	}

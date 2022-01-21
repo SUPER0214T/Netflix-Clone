@@ -113,7 +113,7 @@ function Search() {
 		if (copyInputValue === null) return;
 		if (copyInputValue?.length >= 2) {
 			const getDB = getSearchResults(search.get('keyword') || '');
-			console.log(search.get('keyword'));
+
 			getDB.then((result) => {
 				if (result.results.length !== 0) {
 					setSearchData(result);
@@ -137,12 +137,9 @@ function Search() {
 				/>
 			);
 		}
-		console.log('elementArr: ', elementArr);
-		console.log('sliderIndex: ', sliderIndex);
-		console.log('offset: ', offset);
+
 		return elementArr.map((slider) => slider);
 	}
-	console.log('searchData: ', searchData);
 
 	return (
 		<>

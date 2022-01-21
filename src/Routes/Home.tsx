@@ -104,8 +104,6 @@ function Home() {
 		}
 	}, [overlayOpen]);
 
-	console.log('Home');
-
 	return (
 		<>
 			<Helmet>
