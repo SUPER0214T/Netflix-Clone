@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { Helmet } from 'react-helmet';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -9,7 +9,6 @@ import { getSearchResults, ISearchResults } from '../api';
 import { searchOverlayAtom } from '../atoms';
 import Modal from '../Components/Modal';
 import SearchSlider from '../Components/SearchSlider';
-import SliderComponent from '../Components/SliderComponent';
 
 const Wrapper = styled.div`
 	height: 100vh;
@@ -95,8 +94,12 @@ function Search() {
 			const getDB = getSearchResults(search.get('keyword') || '');
 			console.log(search.get('keyword'));
 			getDB.then((result) => {
-				setSearchData(result);
-				setIsSearchDataReady(true);
+				if (result.results.length !== 0) {
+					setSearchData(result);
+					setIsSearchDataReady(true);
+				} else {
+					setIsSearchDataReady(false);
+				}
 			});
 		}
 	}, [location]);
@@ -118,39 +121,38 @@ function Search() {
 		console.log('offset: ', offset);
 		return elementArr.map((slider) => slider);
 	}
+	console.log('searchData: ', searchData);
 
-	// const { data: searchData, isLoading: isSearchDataLoading } =
-	// 	useQuery<ISearchResults>(['movies', 'page01'], () => {
-	// 		setIsSearchDataReady((prev) => !prev);
-	// 		return getSearchResults(searchInputValue);
-	// 	});
-
-	// console.log('searchData: ', searchData);
 	return (
-		<Wrapper>
-			<div className="search-slider-wrapper">
-				{isSearchDataReady ? dataFor() : <h1>검색 결과가 없습니다.</h1>}
-			</div>
+		<>
+			<Helmet>
+				<title>넷플릭스</title>
+			</Helmet>
+			<Wrapper>
+				<div className="search-slider-wrapper">
+					{isSearchDataReady ? dataFor() : <h1>검색 결과가 없습니다.</h1>}
+				</div>
 
-			{movieMatch ? (
-				<>
-					<AnimatePresence>
-						<Overlay
-							onClick={onOverlayClick}
-							animate={{ opacity: 1 }}
-							exit={{ opacity: 0 }}
-						/>
-					</AnimatePresence>
-					{overlayOpen ? (
-						searchData ? (
-							<Modal data={searchData} />
-						) : (
-							<h1>Loading...</h1>
-						)
-					) : null}
-				</>
-			) : null}
-		</Wrapper>
+				{movieMatch ? (
+					<>
+						<AnimatePresence>
+							<Overlay
+								onClick={onOverlayClick}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+							/>
+						</AnimatePresence>
+						{overlayOpen ? (
+							searchData ? (
+								<Modal data={searchData} />
+							) : (
+								<h1>Loading...</h1>
+							)
+						) : null}
+					</>
+				) : null}
+			</Wrapper>
+		</>
 	);
 }
 

@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -9,11 +10,11 @@ import Modal from '../Components/Modal';
 import SliderComponent from '../Components/SliderComponent';
 import { useRecoilState } from 'recoil';
 import { overlayAtom, searchInputValueAtom, searchOpenAtom } from '../atoms';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
 	position: relative;
 	overflow: hidden;
-	/* height: 200vh; */
 	background-color: black;
 
 	.slider-position {
@@ -27,6 +28,7 @@ const Loader = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	font-size: 5vw;
 `;
 
 const Banner = styled.div<{ bgimagepath: string }>`
@@ -77,8 +79,6 @@ const Overlay = styled(motion.div)`
 /* Home Component */
 function Home() {
 	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
-	const [inputVaule, setInputValue] = useRecoilState(searchInputValueAtom);
-	const [searchOpen, setSearchOpen] = useRecoilState(searchOpenAtom);
 	const navigate = useNavigate();
 	const movieMatch = useMatch('/movies/:movieId');
 	const { data: dataPage01, isLoading: isData01Loading } =
@@ -103,36 +103,44 @@ function Home() {
 		}
 	}, [overlayOpen]);
 
-	useEffect(() => {
-		setInputValue('');
-		setSearchOpen(false);
-	}, []);
+	console.log('Home');
 
 	return (
 		<>
+			<Helmet>
+				<title>홈 - 넷플릭스</title>
+			</Helmet>
 			<Wrapper>
 				{isData01Loading ? (
 					<Loader>로딩중...</Loader>
 				) : (
-					<Banner
-						bgimagepath={makeImagePath(
-							dataPage01?.results[0].backdrop_path || ''
-						)}
-					>
-						<Info>
-							<div>
-								<Title>{dataPage01?.results[0].title}</Title>
-								<OverView>{dataPage01?.results[0].overview}</OverView>
-							</div>
-						</Info>
-					</Banner>
-				)}
+					<>
+						<Banner
+							bgimagepath={makeImagePath(
+								dataPage01?.results[0].backdrop_path || ''
+							)}
+						>
+							<Info>
+								<div>
+									<Title>{dataPage01?.results[0].title}</Title>
+									<OverView>{dataPage01?.results[0].overview}</OverView>
+								</div>
+							</Info>
+						</Banner>
 
-				<div className="slider-position">
-					<SliderComponent data={dataPage01} titleName="지금 뜨는 콘텐츠" />
-					<SliderComponent data={dataPage02} titleName="다시보기 추천 콘텐츠" />
-					<SliderComponent data={dataPage03} titleName="몰아보기 추천 시리즈" />
-				</div>
+						<div className="slider-position">
+							<SliderComponent data={dataPage01} titleName="지금 뜨는 콘텐츠" />
+							<SliderComponent
+								data={dataPage02}
+								titleName="다시보기 추천 콘텐츠"
+							/>
+							<SliderComponent
+								data={dataPage03}
+								titleName="몰아보기 추천 시리즈"
+							/>
+						</div>
+					</>
+				)}
 
 				{movieMatch ? (
 					<>
