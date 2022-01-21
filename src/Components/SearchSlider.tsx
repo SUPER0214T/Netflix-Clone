@@ -11,6 +11,10 @@ const Slider = styled.div`
 	position: relative;
 	min-height: 11vw;
 	margin-bottom: 4vw;
+
+	@media screen and (max-width: 1100px) {
+		min-height: 120px;
+	}
 `;
 
 const Row = styled(motion.div)<{ gridcolumns: number }>`
@@ -21,6 +25,7 @@ const Row = styled(motion.div)<{ gridcolumns: number }>`
 	position: absolute;
 	width: 100%;
 	height: 11vw;
+	min-height: 120px;
 	padding: 0 4%;
 `;
 

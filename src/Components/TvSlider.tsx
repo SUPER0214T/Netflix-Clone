@@ -23,7 +23,7 @@ const SliderWrapper = styled.div`
 
 const Slider = styled.div`
 	position: relative;
-	min-height: 20vh;
+	min-height: 11vw;
 
 	.slider-button {
 		position: absolute;
@@ -44,6 +44,14 @@ const Slider = styled.div`
 		&:hover {
 			background-color: rgba(20, 20, 20, 0.6);
 		}
+
+		@media screen and (max-width: 1100px) {
+			width: 6%;
+		}
+
+		@media screen and (max-width: 800px) {
+			width: 9%;
+		}
 	}
 
 	.slider-left {
@@ -59,6 +67,10 @@ const Slider = styled.div`
 		border-top-left-radius: 4px;
 		border-bottom-left-radius: 4px;
 	}
+
+	@media screen and (max-width: 1100px) {
+		min-height: 120px;
+	}
 `;
 
 const Row = styled(motion.div)<{ gridcolumns: number }>`
@@ -68,7 +80,8 @@ const Row = styled(motion.div)<{ gridcolumns: number }>`
 	margin-bottom: 5px;
 	position: absolute;
 	width: 100%;
-	height: 20vh;
+	height: 11vw;
+	min-height: 120px;
 	padding: 5px;
 `;
 
