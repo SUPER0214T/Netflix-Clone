@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion, useViewportScroll } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useMatch } from 'react-router-dom';
@@ -298,6 +299,7 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 	const { scrollY } = useViewportScroll();
 	const movieMatch = useMatch('/movies/:movieId');
 	const searchMatch = useMatch('/search/:movieId');
+	const tvMatch = useMatch('/tv/:movieId');
 	const [videoOpen, setVideoOpen] = useState<null | string>(null);
 	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
 
@@ -313,10 +315,11 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 
 	useEffect(() => {
 		const clickedMovie = props.data?.results.find((movie) => {
-			if (!movieMatch || !searchMatch) return null;
+			if (!movieMatch || !searchMatch || !tvMatch) return null;
 			return (
 				movie.id + '' === movieMatch.params.movieId ||
-				searchMatch.params.movieId
+				searchMatch.params.movieId ||
+				tvMatch.params.movieId
 			);
 		});
 		setClickedMovie(clickedMovie || null);
@@ -324,12 +327,20 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 
 	useEffect(() => {
 		const getVideoDB = getMovieVideoData(
-			Number(movieMatch?.params.movieId || searchMatch?.params.movieId)
+			Number(
+				movieMatch?.params.movieId ||
+					searchMatch?.params.movieId ||
+					tvMatch?.params.movieId
+			)
 		);
 		getVideoDB.then((result) => setVideoData(result));
 
 		const getDetails = getMovieDetails(
-			Number(movieMatch?.params.movieId || searchMatch?.params.movieId)
+			Number(
+				movieMatch?.params.movieId ||
+					searchMatch?.params.movieId ||
+					tvMatch?.params.movieId
+			)
 		);
 		getDetails.then((result) => setDetails(result));
 	}, []);
