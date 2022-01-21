@@ -78,6 +78,27 @@ function Search() {
 	}, 200);
 
 	useEffect(() => {
+		const totalMovies = searchData?.results.length || 20;
+		const maxIndex = Math.floor(totalMovies / offset) - 1;
+		if (window.outerWidth >= 1400) {
+			setOffset(6);
+			setSliderIndex(maxIndex);
+		} else if (window.outerWidth >= 1100) {
+			setOffset(5);
+			setSliderIndex(maxIndex);
+		} else if (window.outerWidth >= 800) {
+			setOffset(4);
+			setSliderIndex(maxIndex);
+		} else if (window.outerWidth >= 500) {
+			setOffset(3);
+			setSliderIndex(maxIndex);
+		} else {
+			setOffset(2);
+			setSliderIndex(maxIndex);
+		}
+	}, []);
+
+	useEffect(() => {
 		window.addEventListener('resize', handleResize);
 		return () => {
 			window.removeEventListener('resize', handleResize);
