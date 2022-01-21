@@ -1,9 +1,10 @@
+import React from 'react';
 import { motion, useViewportScroll } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { searchInputValueAtom, searchOpenAtom } from '../atoms';
+import { searchOpenAtom } from '../atoms';
 
 const Nav = styled(motion.nav)`
 	display: flex;
@@ -13,7 +14,7 @@ const Nav = styled(motion.nav)`
 	width: 100%;
 	top: 0;
 	background-color: black;
-	height: 80px;
+	height: 68px;
 	font-size: 12px;
 	padding: 0 4%;
 	z-index: 2;
@@ -118,9 +119,10 @@ const logoVariants = {
 		fillOpacity: 1,
 	},
 	active: {
-		fillOpacity: [0, 1, 0, 1],
+		fillOpacity: [1, 0, 1],
 		transition: {
 			repeat: Infinity,
+			duration: 4,
 		},
 	},
 };
@@ -130,15 +132,14 @@ function Header() {
 	const [isscrollZero, setIsScrollZero] = useState(true);
 	const { scrollY } = useViewportScroll();
 	const navigate = useNavigate();
-	const [inputVaule, setInputValue] = useRecoilState(searchInputValueAtom);
+	const [inputValue, setInputValue] = useState('');
 
 	const openSearch = () => {
 		setSearchOpen((prev) => !prev);
 	};
 
 	const closeSearch = () => {
-		console.log(inputVaule);
-		if (inputVaule === '' || inputVaule === null) {
+		if (inputValue === '' || inputValue === null) {
 			setSearchOpen(false);
 		}
 	};
@@ -161,8 +162,6 @@ function Header() {
 	}, [scrollY]);
 
 	const onInputChange = (e: any) => {
-		console.log('onChange: ', e.target.value);
-		setInputValue(e.target.value);
 		if (e.target.value === '') {
 			navigate(`/`);
 		} else {
@@ -225,12 +224,16 @@ function Header() {
 						></path>
 					</motion.svg>
 					<Input
+						initial={false}
 						animate={{ scaleX: searchOpen ? 1 : 0 }}
 						transition={{ type: 'linear' }}
 						onBlur={closeSearch}
 						placeholder="두 글자 이상"
-						onChange={onInputChange}
-						value={inputVaule}
+						onChange={(e) => {
+							onInputChange(e);
+							setInputValue(e.target.value);
+						}}
+						value={inputValue}
 					/>
 				</Search>
 			</Col>
