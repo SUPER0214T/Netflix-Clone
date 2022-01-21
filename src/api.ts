@@ -20,12 +20,6 @@ export interface IGetMoviesResult {
 	results: IMovies[];
 }
 
-// interface IVideos {
-// name: "[매트릭스: 리저렉션] 네오의 선택 영상",
-// key: "jRZ5V812OZo",
-// id: "61c823e9a93d25001c286277"
-// }
-
 interface IVideos {
 	name: string;
 	key: string;
@@ -37,9 +31,30 @@ export interface IGetMovieVideo {
 	results: IVideos[];
 }
 
-export function getMovies() {
+interface IGenres {
+	id: number;
+	name: string;
+}
+
+export interface IDetails {
+	genres: IGenres[];
+	tagline: string;
+	release_date: string;
+	runtime: number;
+	title: string;
+	overview: string;
+	backdrop_path: string;
+	poster_path: string;
+}
+
+export interface ISearchResults {
+	page: number;
+	results: IMovies[];
+}
+
+export function getMovies(pageNumber: number) {
 	return fetch(
-		`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+		`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=${pageNumber}&region=kr`
 	).then((response) => response.json());
 }
 
@@ -58,4 +73,10 @@ export function getMovieVideoData(movieId: number) {
 
 export function getMovieVideoURL(movieKey: string) {
 	return `https://www.youtube.com/embed/${movieKey}`;
+}
+
+export function getSearchResults(query: string) {
+	return fetch(
+		`${BASE_PATH}/search/movie?api_key=${API_KEY}&language=ko-KR&query=${query}&page=1&include_adult=false`
+	).then((response) => response.json());
 }
