@@ -5,6 +5,7 @@ import Home from './Routes/Home';
 import Search from './Routes/Search';
 import Tv from './Routes/Tv';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import Profile from './Routes/Profile';
 
 function App() {
 	return (
@@ -17,9 +18,9 @@ function App() {
 				<Route path="/tv/:movieId" element={<Tv />} />
 				<Route path="/search" element={<Search />} />
 				<Route path="/search/:movieId" element={<Search />} />
-				<Route path="/*" element={<h1>존재하지 않는 페이지입니다.</h1>} />
+				<Route path="/profile" element={<Profile />} />
+				<Route path="/*" element={<Profile />} />
 			</Routes>
-			<ReactQueryDevtools initialIsOpen={true} />
 		</HashRouter>
 	);
 }

@@ -205,6 +205,11 @@ function Header() {
 							시리즈 <Circle />
 						</NavLink>
 					</Item>
+					<Item>
+						<NavLink to="/profile">
+							프로필 선택 <Circle />
+						</NavLink>
+					</Item>
 				</Items>
 			</Col>
 			<Col>
