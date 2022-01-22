@@ -39,7 +39,8 @@ const MovieModalWrapper = styled.div`
 
 const MovieModal = styled.div`
 	position: absolute;
-	width: 850px;
+	width: 95%;
+
 	z-index: 200;
 	top: 30px;
 	background-color: black;
@@ -47,8 +48,8 @@ const MovieModal = styled.div`
 	overflow: hidden;
 	min-height: 100vh;
 
-	@media screen and (max-width: 850px) {
-		width: 95%;
+	@media screen and (min-width: 850px) {
+		width: 850px;
 	}
 `;
 

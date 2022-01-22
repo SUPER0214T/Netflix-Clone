@@ -9,11 +9,11 @@ import { makeImagePath } from '../utils';
 // Components
 const Slider = styled.div`
 	position: relative;
-	min-height: 11vw;
+	min-height: 120px;
 	margin-bottom: 4vw;
 
-	@media screen and (max-width: 1100px) {
-		min-height: 120px;
+	@media screen and (min-width: 1100px) {
+		min-height: 11vw;
 	}
 `;
 

@@ -11,6 +11,7 @@ import SliderComponent from '../Components/SliderComponent';
 import { useRecoilState } from 'recoil';
 import { overlayAtom, searchInputValueAtom, searchOpenAtom } from '../atoms';
 import { Helmet } from 'react-helmet';
+import { InputType } from 'zlib';
 
 const Wrapper = styled.div`
 	position: relative;
@@ -84,6 +85,7 @@ const Overlay = styled(motion.div)`
 /* Home Component */
 function Home() {
 	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
+	const [searchOpen, setSearchOpen] = useRecoilState(searchOpenAtom);
 	const navigate = useNavigate();
 	const movieMatch = useMatch('/movies/:movieId');
 	const { data: dataPage01, isLoading: isData01Loading } =
@@ -102,6 +104,10 @@ function Home() {
 			document.body.style.overflow = 'unset';
 		}
 	}, [overlayOpen]);
+
+	useEffect(() => {
+		setSearchOpen(false);
+	}, []);
 
 	return (
 		<>

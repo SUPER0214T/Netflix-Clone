@@ -71,6 +71,25 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: inherit;
   }
+
+  button {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+  }
+
+  .sm-hidden {
+    @media screen and (max-width: 450px){
+      display: none !important;
+    }
+  }
+
+  .sm-only {
+    @media screen and (min-width: 449px){
+      display: none !important;
+    }
+  }
 `;
 
 const client = new QueryClient();
