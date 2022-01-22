@@ -57,6 +57,25 @@ const ModalImg = styled.div`
 	width: 100%;
 	position: relative;
 
+	.close-modal-btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		top: 16px;
+		right: 16px;
+		width: 36px;
+		height: 36px;
+		background-color: #181818;
+		border-radius: 50%;
+		padding: 8px;
+		cursor: pointer;
+
+		button {
+			cursor: pointer;
+		}
+	}
+
 	img {
 		width: 100%;
 		cursor: pointer;
@@ -335,6 +354,10 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 		}
 	}
 
+	const onClickModalClose = () => {
+		setOverlayOpen(false);
+	};
+
 	useEffect(() => {
 		const clickedMovie = props.data?.results.find((movie) => {
 			if (!movieMatch || !searchMatch || !tvMatch) return null;
@@ -389,6 +412,24 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 						})
 					}
 				>
+					<div className="close-modal-btn" onClick={onClickModalClose}>
+						<button>
+							<svg
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M2.29297 3.70706L10.5859 12L2.29297 20.2928L3.70718 21.7071L12.0001 13.4142L20.293 21.7071L21.7072 20.2928L13.4143 12L21.7072 3.70706L20.293 2.29285L12.0001 10.5857L3.70718 2.29285L2.29297 3.70706Z"
+									fill="currentColor"
+								></path>
+							</svg>
+						</button>
+					</div>
 					<div>
 						<motion.img
 							src={makeImagePath(
