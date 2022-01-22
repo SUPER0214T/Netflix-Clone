@@ -253,6 +253,10 @@ function Header() {
 		setIsMenuOpen(false);
 	};
 
+	const onNavItemClick = () => {
+		window.scrollTo(0, 0);
+	};
+
 	return (
 		<Nav
 			animate={{
@@ -293,12 +297,20 @@ function Header() {
 							<NavMenu>
 								<ul>
 									<li onClick={onNavMenuItemClick}>
-										<NavLink to="/" className="nav-menu-item">
+										<NavLink
+											to="/"
+											className="nav-menu-item"
+											onClick={onNavItemClick}
+										>
 											홈
 										</NavLink>
 									</li>
 									<li onClick={onNavMenuItemClick}>
-										<NavLink to="/tv" className="nav-menu-item">
+										<NavLink
+											to="/tv"
+											className="nav-menu-item"
+											onClick={onNavItemClick}
+										>
 											시리즈
 										</NavLink>
 									</li>
@@ -313,12 +325,12 @@ function Header() {
 						) : null}
 					</Item>
 					<Item className="sm-hidden">
-						<NavLink to="/" className="nav-item">
+						<NavLink to="/" className="nav-item" onClick={onNavItemClick}>
 							홈 <Circle />
 						</NavLink>
 					</Item>
 					<Item className="sm-hidden">
-						<NavLink to="/tv" className="nav-item">
+						<NavLink to="/tv" className="nav-item" onClick={onNavItemClick}>
 							시리즈 <Circle />
 						</NavLink>
 					</Item>
