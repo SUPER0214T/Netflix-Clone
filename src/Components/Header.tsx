@@ -70,6 +70,7 @@ const Item = styled.li`
 
 	.nav-item {
 		color: ${(props) => props.theme.white.lighter};
+		transition: opacity 0.35s ease-in-out;
 	}
 
 	&:hover {
@@ -85,7 +86,7 @@ const Item = styled.li`
 	}
 
 	.nav-item.active {
-		pointer-events: none;
+		cursor: default;
 		font-weight: 700;
 		color: ${(props) => props.theme.white.darker};
 	}
@@ -311,18 +312,18 @@ function Header() {
 							</NavMenu>
 						) : null}
 					</Item>
-					<Item className="sm-hidden nav-item">
-						<NavLink to="/">
+					<Item className="sm-hidden">
+						<NavLink to="/" className="nav-item">
 							홈 <Circle />
 						</NavLink>
 					</Item>
-					<Item className="sm-hidden nav-item">
-						<NavLink to="/tv">
+					<Item className="sm-hidden">
+						<NavLink to="/tv" className="nav-item">
 							시리즈 <Circle />
 						</NavLink>
 					</Item>
-					<Item className="sm-hidden nav-item">
-						<NavLink to="/profile">
+					<Item className="sm-hidden">
+						<NavLink to="/profile" className="nav-item">
 							프로필 선택 <Circle />
 						</NavLink>
 					</Item>
@@ -349,7 +350,7 @@ function Header() {
 						animate={{ scaleX: searchOpen ? 1 : 0 }}
 						transition={{ type: 'linear' }}
 						onBlur={closeSearch}
-						placeholder="두 글자 이상"
+						placeholder="두 글자 이상 입력해주세요"
 						onChange={(e) => {
 							onInputChange(e);
 							setInputValue(e.target.value);
