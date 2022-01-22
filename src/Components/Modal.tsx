@@ -1,7 +1,7 @@
 import React from 'react';
-import { motion, useViewportScroll } from 'framer-motion';
+import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { useMatch } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
 	getMovieDetails,
@@ -14,6 +14,8 @@ import {
 	ISearchResults,
 } from '../api';
 import { makeImagePath } from '../utils';
+import { useRecoilState } from 'recoil';
+import { overlayAtom } from '../atoms';
 
 const MovieModalWrapper = styled.div`
 	display: flex;
@@ -24,6 +26,8 @@ const MovieModalWrapper = styled.div`
 	top: 0;
 	left: 0;
 	overflow-y: scroll;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 100;
 
 	.no-list {
 		line-height: 27px;
@@ -36,7 +40,7 @@ const MovieModalWrapper = styled.div`
 const MovieModal = styled.div`
 	position: absolute;
 	width: 850px;
-	z-index: 100;
+	z-index: 200;
 	top: 30px;
 	background-color: black;
 	border-radius: 6px;
@@ -293,6 +297,16 @@ const MovieInfoWrapper = styled.div`
 	}
 `;
 
+const Overlay = styled(motion.div)`
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	/* background-color: rgba(0, 0, 0, 0.5); */
+	opacity: 0;
+	z-index: 110;
+`;
+
 function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 	const [videoData, setVideoData] = useState<IGetMovieVideo>();
 	const [details, setDetails] = useState<IDetails>();
@@ -302,6 +316,14 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 	const tvMatch = useMatch('/tv/:movieId');
 	const [videoOpen, setVideoOpen] = useState<null | string>(null);
 	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
+	//
+	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
+	const navigate = useNavigate();
+	const onOverlayClick = () => {
+		navigate(-1);
+		setOverlayOpen(false);
+	};
+	//
 
 	function onClickOverviewAdd() {
 		const ovAdd: HTMLElement | null = document.querySelector(
@@ -346,6 +368,13 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 
 	return (
 		<MovieModalWrapper style={{ top: scrollY.get() }}>
+			<AnimatePresence>
+				<Overlay
+					onClick={onOverlayClick}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+				/>
+			</AnimatePresence>
 			<MovieModal>
 				<ModalImg
 					onClick={() =>

@@ -62,6 +62,10 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Nanum Gothic', sans-serif;
     color: ${(props) => props.theme.white.darker};
     background-color: black;
+
+    &::-webkit-scrollbar{
+      display: none;
+    }
   }
   a {
     text-decoration: none;

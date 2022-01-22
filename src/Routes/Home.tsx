@@ -65,6 +65,10 @@ const OverView = styled.p`
 	font-weight: 400;
 	line-height: normal;
 	text-shadow: 2px 2px 4px rgb(0 0 0 / 45%);
+	display: -webkit-box;
+	-webkit-line-clamp: 5;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
 `;
 
 const Overlay = styled(motion.div)`
@@ -74,7 +78,7 @@ const Overlay = styled(motion.div)`
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
 	opacity: 0;
-	z-index: 30;
+	z-index: 110;
 `;
 
 /* Home Component */
@@ -90,11 +94,6 @@ function Home() {
 
 	const { data: dataPage03, isLoading: isData03Loading } =
 		useQuery<IGetMoviesResult>(['movies', 'page03'], () => getMovies(3));
-
-	const onOverlayClick = () => {
-		navigate(`/`);
-		setOverlayOpen(false);
-	};
 
 	useEffect(() => {
 		if (overlayOpen) {
@@ -143,13 +142,6 @@ function Home() {
 
 				{movieMatch ? (
 					<>
-						<AnimatePresence>
-							<Overlay
-								onClick={onOverlayClick}
-								animate={{ opacity: 1 }}
-								exit={{ opacity: 0 }}
-							/>
-						</AnimatePresence>
 						{overlayOpen ? (
 							dataPage01 ? (
 								<Modal data={dataPage01} />
