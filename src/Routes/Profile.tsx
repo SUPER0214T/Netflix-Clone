@@ -77,7 +77,8 @@ const Wrapper = styled.div`
 				margin-right: 2vw;
 			}
 
-			&:hover {
+			&:hover,
+			&:active {
 				.profile {
 					&-img {
 						border-color: white;
@@ -108,7 +109,8 @@ const Wrapper = styled.div`
 				padding: 8px 24px;
 			}
 
-			&:hover {
+			&:hover,
+			&:active {
 				border-color: white;
 
 				span {

@@ -158,6 +158,11 @@ const NavMenu = styled.div`
 			&:not(.active) {
 				opacity: 0.5;
 			}
+
+			&:hover,
+			&:active {
+				opacity: 1;
+			}
 		}
 	}
 
