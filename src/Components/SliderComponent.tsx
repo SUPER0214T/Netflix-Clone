@@ -32,7 +32,7 @@ const Slider = styled.div`
 		justify-content: center;
 		z-index: 1;
 		width: 4%;
-		height: 100%;
+		height: calc(100% - 10px);
 		background-color: rgba(20, 20, 20, 0.4);
 		cursor: pointer;
 
@@ -56,14 +56,14 @@ const Slider = styled.div`
 
 	.slider-left {
 		left: 0;
-		top: 0;
+		top: 5px;
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
 
 	.slider-right {
 		right: 0;
-		top: 0;
+		top: 5px;
 		border-top-left-radius: 4px;
 		border-bottom-left-radius: 4px;
 	}
