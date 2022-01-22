@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -143,9 +143,11 @@ function Search() {
 
 	return (
 		<>
-			<Helmet>
-				<title>넷플릭스</title>
-			</Helmet>
+			<HelmetProvider>
+				<Helmet>
+					<title>넷플릭스</title>
+				</Helmet>
+			</HelmetProvider>
 			<Wrapper>
 				<div className="search-slider-wrapper">
 					{isSearchDataReady ? dataFor() : <h1>검색 결과가 없습니다.</h1>}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
@@ -7,11 +7,10 @@ import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
 import { useMatch, useNavigate } from 'react-router-dom';
 import Modal from '../Components/Modal';
-import SliderComponent from '../Components/SliderComponent';
 import { useRecoilState } from 'recoil';
-import { overlayAtom, searchInputValueAtom, searchOpenAtom } from '../atoms';
+import { overlayAtom } from '../atoms';
 import TvSlider from '../Components/TvSlider';
-import { Helmet } from 'react-helmet';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 
 const Wrapper = styled.div`
 	position: relative;
@@ -96,6 +95,15 @@ function Tv() {
 	const { data: dataPage04, isLoading: isData04Loading } =
 		useQuery<IGetMoviesResult>(['movies', 'page04'], () => getMovies(4));
 
+	const { data: dataPage07, isLoading: isData07Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page07'], () => getMovies(7));
+
+	const { data: dataPage08, isLoading: isData08Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page08'], () => getMovies(8));
+
+	const { data: dataPage09, isLoading: isData09Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page09'], () => getMovies(9));
+
 	const onOverlayClick = () => {
 		navigate(`/tv`);
 		setOverlayOpen(false);
@@ -111,9 +119,11 @@ function Tv() {
 
 	return (
 		<>
-			<Helmet>
-				<title>시리즈 - 넷플릭스</title>
-			</Helmet>
+			<HelmetProvider>
+				<Helmet>
+					<title>시리즈 - 넷플릭스</title>
+				</Helmet>
+			</HelmetProvider>
 			<Wrapper>
 				{isData02Loading ? (
 					<Loader>로딩중...</Loader>
@@ -139,6 +149,9 @@ function Tv() {
 								titleName="평단의 찬사를 받은 시리즈"
 							/>
 							<TvSlider data={dataPage04} titleName="" />
+							<TvSlider data={dataPage07} titleName="드라마" />
+							<TvSlider data={dataPage08} titleName="할리우드 영화" />
+							<TvSlider data={dataPage09} titleName="다시보기 추천 콘텐츠" />
 						</div>
 					</>
 				)}

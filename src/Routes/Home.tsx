@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
@@ -9,9 +9,8 @@ import { useMatch, useNavigate } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import SliderComponent from '../Components/SliderComponent';
 import { useRecoilState } from 'recoil';
-import { overlayAtom, searchInputValueAtom, searchOpenAtom } from '../atoms';
-import { Helmet } from 'react-helmet';
-import { InputType } from 'zlib';
+import { overlayAtom, searchOpenAtom } from '../atoms';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 
 const Wrapper = styled.div`
 	position: relative;
@@ -97,6 +96,15 @@ function Home() {
 	const { data: dataPage03, isLoading: isData03Loading } =
 		useQuery<IGetMoviesResult>(['movies', 'page03'], () => getMovies(3));
 
+	const { data: dataPage04, isLoading: isData04Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page04'], () => getMovies(4));
+
+	const { data: dataPage05, isLoading: isData05Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page05'], () => getMovies(5));
+
+	const { data: dataPage06, isLoading: isData06Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page06'], () => getMovies(6));
+
 	useEffect(() => {
 		if (overlayOpen) {
 			document.body.style.overflow = 'hidden';
@@ -111,9 +119,12 @@ function Home() {
 
 	return (
 		<>
-			<Helmet>
-				<title>홈 - 넷플릭스</title>
-			</Helmet>
+			<HelmetProvider>
+				<Helmet>
+					<title>홈 - 넷플릭스</title>
+				</Helmet>
+			</HelmetProvider>
+
 			<Wrapper>
 				{isData01Loading ? (
 					<Loader>로딩중...</Loader>
@@ -142,6 +153,9 @@ function Home() {
 								data={dataPage03}
 								titleName="몰아보기 추천 시리즈"
 							/>
+							<SliderComponent data={dataPage04} titleName="해외 시리즈" />
+							<SliderComponent data={dataPage05} titleName="국내 시리즈" />
+							<SliderComponent data={dataPage06} titleName="" />
 						</div>
 					</>
 				)}
