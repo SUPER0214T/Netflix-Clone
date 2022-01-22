@@ -93,8 +93,8 @@ function Tv() {
 	const { data: dataPage02, isLoading: isData02Loading } =
 		useQuery<IGetMoviesResult>(['movies', 'page02'], () => getMovies(2));
 
-	const { data: dataPage03, isLoading: isData03Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page03'], () => getMovies(3));
+	const { data: dataPage04, isLoading: isData04Loading } =
+		useQuery<IGetMoviesResult>(['movies', 'page04'], () => getMovies(4));
 
 	const onOverlayClick = () => {
 		navigate(`/tv`);
@@ -138,7 +138,7 @@ function Tv() {
 								data={dataPage01}
 								titleName="평단의 찬사를 받은 시리즈"
 							/>
-							<TvSlider data={dataPage03} titleName="" />
+							<TvSlider data={dataPage04} titleName="" />
 						</div>
 					</>
 				)}

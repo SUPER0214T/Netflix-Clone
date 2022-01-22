@@ -54,7 +54,7 @@ export interface ISearchResults {
 
 export function getMovies(pageNumber: number) {
 	return fetch(
-		`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=${pageNumber}&region=kr`
+		`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=${pageNumber}`
 	).then((response) => response.json());
 }
 
