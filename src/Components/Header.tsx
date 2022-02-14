@@ -241,7 +241,7 @@ function Header() {
 		});
 	}, [scrollY]);
 
-	const onInputChange = (e: any) => {
+	const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value === '') {
 			navigate(`/`);
 		} else {

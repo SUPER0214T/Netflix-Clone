@@ -73,12 +73,16 @@ const ModalImg = styled.div`
 
 		button {
 			cursor: pointer;
+			pointer-events: none;
+		}
+
+		svg {
+			pointer-events: none;
 		}
 	}
 
 	img {
 		width: 100%;
-		cursor: pointer;
 	}
 
 	.modal-image-gradient {
@@ -358,6 +362,16 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 		setOverlayOpen(false);
 	};
 
+	const onClickModalImg = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		setVideoOpen(() => {
+			if (videoData?.results[0]?.key) {
+				return videoData?.results[0]?.key || '';
+			} else {
+				return null;
+			}
+		});
+	};
+
 	useEffect(() => {
 		const clickedMovie = props.data?.results.find((movie) => {
 			if (!movieMatch || !searchMatch || !tvMatch) return null;
@@ -401,16 +415,11 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 			</AnimatePresence>
 			<MovieModal>
 				<ModalImg
-					onClick={() =>
-						setVideoOpen(() => {
-							if (videoData?.results[0]?.key) {
-								return videoData?.results[0]?.key || '';
-							} else {
-								alert('영상이 준비되지 않았습니다!');
-								return null;
-							}
-						})
-					}
+					onClick={(e) => {
+						if (e.currentTarget.className !== 'close-modal-btn') {
+							onClickModalImg(e);
+						}
+					}}
 				>
 					<div className="close-modal-btn" onClick={onClickModalClose}>
 						<button>
@@ -420,10 +429,11 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 								viewBox="0 0 24 24"
 								fill="none"
 								xmlns="http://www.w3.org/2000/svg"
+								role="button"
 							>
 								<path
-									fill-rule="evenodd"
-									clip-rule="evenodd"
+									fillRule="evenodd"
+									clipRule="evenodd"
 									d="M2.29297 3.70706L10.5859 12L2.29297 20.2928L3.70718 21.7071L12.0001 13.4142L20.293 21.7071L21.7072 20.2928L13.4143 12L21.7072 3.70706L20.293 2.29285L12.0001 10.5857L3.70718 2.29285L2.29297 3.70706Z"
 									fill="currentColor"
 								></path>
