@@ -5,6 +5,8 @@ import { RecoilRoot } from 'recoil';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import App from './App';
 import { theme } from './theme';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 
 export const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
@@ -80,13 +82,13 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .sm-hidden {
-    @media screen and (max-width: 450px){
+    @media screen and (max-width: 884px){
       display: none !important;
     }
   }
 
   .sm-only {
-    @media screen and (min-width: 449px){
+    @media screen and (min-width: 885px){
       display: none !important;
     }
   }

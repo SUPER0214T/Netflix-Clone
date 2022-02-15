@@ -1,6 +1,6 @@
 import React from 'react';
 import { AnimatePresence, motion, useViewportScroll } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
