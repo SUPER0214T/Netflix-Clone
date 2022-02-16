@@ -130,7 +130,8 @@ function Home() {
 					<>
 						<Banner
 							bgimagepath={makeImagePath(
-								dataPage01?.results[0].backdrop_path || ''
+								dataPage01?.results[0].backdrop_path || '',
+								'w1280'
 							)}
 						>
 							<Info>

@@ -3,6 +3,6 @@ const DEFAULT_IMG_PATH =
 
 export function makeImagePath(id: string, format?: string) {
 	return id !== '' && id !== null
-		? `https://image.tmdb.org/t/p/${format ? format : 'original'}${id}`
+		? `https://image.tmdb.org/t/p/${format ? format : 'w500'}${id}`
 		: DEFAULT_IMG_PATH;
 }

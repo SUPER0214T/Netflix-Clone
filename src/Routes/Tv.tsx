@@ -124,7 +124,8 @@ function Tv() {
 					<>
 						<Banner
 							bgimagepath={makeImagePath(
-								dataPage02?.results[0].backdrop_path || ''
+								dataPage02?.results[0].backdrop_path || '',
+								'w1280'
 							)}
 						>
 							<Info>

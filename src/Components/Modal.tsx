@@ -447,7 +447,8 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 									clickedMovie?.poster_path ||
 									details?.backdrop_path ||
 									details?.poster_path ||
-									''
+									'',
+								'w1280'
 							)}
 							alt="Modal Title Img"
 						/>
@@ -519,7 +520,8 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 																clickedMovie?.poster_path ||
 																details?.backdrop_path ||
 																details?.poster_path ||
-																''
+																'',
+															'w780'
 														)}
 														alt="Card Img"
 													/>
