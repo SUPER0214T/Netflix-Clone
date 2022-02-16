@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 import Modal from '../Components/Modal';
 import SliderComponent from '../Components/SliderComponent';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { overlayAtom, searchOpenAtom } from '../atoms';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 
@@ -71,39 +70,38 @@ const OverView = styled.p`
 	overflow: hidden;
 `;
 
-const Overlay = styled(motion.div)`
-	position: fixed;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	opacity: 0;
-	z-index: 110;
-`;
-
 /* Home Component */
 function Home() {
-	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
-	const [searchOpen, setSearchOpen] = useRecoilState(searchOpenAtom);
-	const navigate = useNavigate();
+	const overlayOpen = useRecoilValue(overlayAtom);
+	const setSearchOpen = useSetRecoilState(searchOpenAtom);
 	const movieMatch = useMatch('/movies/:movieId');
 	const { data: dataPage01, isLoading: isData01Loading } =
 		useQuery<IGetMoviesResult>(['movies', 'page01'], () => getMovies(1));
 
-	const { data: dataPage02, isLoading: isData02Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page02'], () => getMovies(2));
+	const { data: dataPage02 } = useQuery<IGetMoviesResult>(
+		['movies', 'page02'],
+		() => getMovies(2)
+	);
 
-	const { data: dataPage03, isLoading: isData03Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page03'], () => getMovies(3));
+	const { data: dataPage03 } = useQuery<IGetMoviesResult>(
+		['movies', 'page03'],
+		() => getMovies(3)
+	);
 
-	const { data: dataPage04, isLoading: isData04Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page04'], () => getMovies(4));
+	const { data: dataPage04 } = useQuery<IGetMoviesResult>(
+		['movies', 'page04'],
+		() => getMovies(4)
+	);
 
-	const { data: dataPage05, isLoading: isData05Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page05'], () => getMovies(5));
+	const { data: dataPage05 } = useQuery<IGetMoviesResult>(
+		['movies', 'page05'],
+		() => getMovies(5)
+	);
 
-	const { data: dataPage06, isLoading: isData06Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page06'], () => getMovies(6));
+	const { data: dataPage06 } = useQuery<IGetMoviesResult>(
+		['movies', 'page06'],
+		() => getMovies(6)
+	);
 
 	useEffect(() => {
 		if (overlayOpen) {

@@ -3,7 +3,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { IGetMoviesResult, ISearchResults } from '../api';
 import { overlayAtom } from '../atoms';
@@ -171,7 +171,7 @@ function TvSlider(props: {
 	const [sliderLimit, setSliderLimit] = useState(false);
 	const [offset, setOffset] = useState(6);
 	const navigate = useNavigate();
-	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
+	const setOverlayOpen = useSetRecoilState(overlayAtom);
 
 	// Functions
 	const increaseSliderIndex = () => {

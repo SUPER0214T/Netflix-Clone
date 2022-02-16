@@ -1,6 +1,6 @@
 import { motion, Variants } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { ISearchResults } from '../api';
 import { searchOverlayAtom } from '../atoms';
@@ -102,7 +102,7 @@ function SearchSlider(props: {
 }) {
 	const { data, offset, sliderIndex } = props;
 	const navigate = useNavigate();
-	const [overlayOpen, setOverlayOpen] = useRecoilState(searchOverlayAtom);
+	const setOverlayOpen = useSetRecoilState(searchOverlayAtom);
 
 	// Functions
 	const onBoxClick = (movieId: number) => {

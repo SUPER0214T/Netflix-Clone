@@ -14,7 +14,7 @@ import {
 	ISearchResults,
 } from '../api';
 import { makeImagePath } from '../utils';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { overlayAtom } from '../atoms';
 
 const MovieModalWrapper = styled.div`
@@ -341,7 +341,7 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 	const [videoOpen, setVideoOpen] = useState<null | string>(null);
 	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
 	//
-	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
+	const setOverlayOpen = useSetRecoilState(overlayAtom);
 	const navigate = useNavigate();
 	const onOverlayClick = () => {
 		navigate(-1);
