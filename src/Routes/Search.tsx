@@ -155,13 +155,13 @@ function Search() {
 
 				{movieMatch ? (
 					<>
-						<AnimatePresence>
+						{/* 						<AnimatePresence>
 							<Overlay
 								onClick={onOverlayClick}
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
 							/>
-						</AnimatePresence>
+						</AnimatePresence> */}
 						{overlayOpen ? (
 							searchData ? (
 								<Modal data={searchData} />

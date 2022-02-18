@@ -270,7 +270,7 @@ function Header() {
 		>
 			<Col>
 				<LogoWrapper>
-					<Link to="/">
+					<Link to="/" aria-label="메인 페이지로 이동">
 						<Logo
 							variants={logoVariants}
 							whileHover="active"

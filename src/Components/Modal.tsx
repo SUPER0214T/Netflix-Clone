@@ -14,8 +14,8 @@ import {
 	ISearchResults,
 } from '../api';
 import { makeImagePath } from '../utils';
-import { useSetRecoilState } from 'recoil';
-import { overlayAtom } from '../atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { overlayAtom, searchOverlayAtom } from '../atoms';
 
 const MovieModalWrapper = styled.div`
 	display: flex;
@@ -74,6 +74,7 @@ const ModalImg = styled.div`
 		button {
 			cursor: pointer;
 			pointer-events: none;
+			z-index: 1000;
 		}
 
 		svg {
@@ -341,7 +342,8 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 	const [videoOpen, setVideoOpen] = useState<null | string>(null);
 	const [clickedMovie, setClickedMovie] = useState<null | IMovies>(null);
 	//
-	const setOverlayOpen = useSetRecoilState(overlayAtom);
+	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
+	const setSliderOverlayOpen = useSetRecoilState(searchOverlayAtom);
 	const navigate = useNavigate();
 	const onOverlayClick = () => {
 		navigate(-1);
@@ -358,8 +360,15 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 		}
 	}
 
+	useEffect(() => {
+		console.log(overlayOpen);
+	}, [overlayOpen]);
+
 	const onClickModalClose = () => {
 		setOverlayOpen(false);
+		setSliderOverlayOpen(false);
+		// navigate(-1);
+		console.log('닫기 버튼 클릭');
 	};
 
 	const onClickModalImg = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
