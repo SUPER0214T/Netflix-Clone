@@ -82,8 +82,10 @@ const ModalImg = styled.div`
 		}
 	}
 
-	img {
-		width: 100%;
+	.modal-img-wrapper {
+		img {
+			width: 100%;
+		}
 	}
 
 	.modal-image-gradient {
@@ -423,13 +425,7 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 				/>
 			</AnimatePresence>
 			<MovieModal>
-				<ModalImg
-					onClick={(e) => {
-						if (e.currentTarget.className !== 'close-modal-btn') {
-							onClickModalImg(e);
-						}
-					}}
-				>
+				<ModalImg>
 					<div className="close-modal-btn" onClick={onClickModalClose}>
 						<button>
 							<svg
@@ -449,7 +445,7 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 							</svg>
 						</button>
 					</div>
-					<div>
+					<div className="modal-img-wrapper">
 						<motion.img
 							src={makeImagePath(
 								clickedMovie?.backdrop_path ||
@@ -460,6 +456,11 @@ function Modal(props: { data: IGetMoviesResult | ISearchResults }) {
 								'w1280'
 							)}
 							alt="Modal Title Img"
+							onClick={(e) => {
+								if (e.currentTarget.className !== 'close-modal-btn') {
+									onClickModalImg(e);
+								}
+							}}
 						/>
 					</div>
 					<div className="modal-image-gradient" />
