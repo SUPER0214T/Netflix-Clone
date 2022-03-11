@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
@@ -6,7 +6,7 @@ import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getSearchResults, ISearchResults } from '../api';
-import { searchOverlayAtom } from '../atoms';
+import { overlayAtom } from '../atoms';
 import Modal from '../Components/Modal/index';
 import SearchSlider from '../Components/SearchSlider';
 
@@ -38,15 +38,10 @@ function Search() {
 	const navigate = useNavigate();
 	const [searchData, setSearchData] = useState<ISearchResults>();
 	const [isSearchDataReady, setIsSearchDataReady] = useState<boolean>(false);
-	const [overlayOpen, setOverlayOpen] = useRecoilState(searchOverlayAtom);
+	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
 	const movieMatch = useMatch('/search/:movieId');
 	const [offset, setOffset] = useState(6);
 	const [sliderIndex, setSliderIndex] = useState(3);
-
-	const onOverlayClick = () => {
-		navigate(-1);
-		setOverlayOpen(false);
-	};
 
 	useEffect(() => {
 		if (overlayOpen) {
@@ -155,13 +150,6 @@ function Search() {
 
 				{movieMatch ? (
 					<>
-						{/* 						<AnimatePresence>
-							<Overlay
-								onClick={onOverlayClick}
-								animate={{ opacity: 1 }}
-								exit={{ opacity: 0 }}
-							/>
-						</AnimatePresence> */}
 						{overlayOpen ? (
 							searchData ? (
 								<Modal data={searchData} />

@@ -88,6 +88,8 @@ function SliderCard({ data, sliderIndex, offset }: ISliderCard) {
 			navigate(`/movies/${movieId}`);
 		} else if (location?.pathname === '/tv') {
 			navigate(`/tv/${movieId}`);
+		} else if (location?.pathname.includes('/search')) {
+			navigate(`/search/${movieId}`);
 		}
 	};
 
@@ -109,7 +111,6 @@ function SliderCard({ data, sliderIndex, offset }: ISliderCard) {
 							onBoxClick(movie.id);
 							setOverlayOpen(true);
 						}}
-						// layoutId={movie.id + ''}
 					>
 						{/* BoxInfo에도 whileHover가 들어간다. */}
 						<div className="box-info-wrapper">
