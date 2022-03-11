@@ -10,6 +10,7 @@ import SliderComponent from '../Components/common/Slider/index';
 import { useRecoilValue } from 'recoil';
 import { overlayAtom } from '../atoms';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
+import { useMovieData, useMovieDataStandard } from '../Hooks/useMovieData';
 
 const Wrapper = styled.div`
 	position: relative;
@@ -74,33 +75,13 @@ const OverView = styled.p`
 function Tv() {
 	const overlayOpen = useRecoilValue(overlayAtom);
 	const movieMatch = useMatch('/tv/:movieId');
-	const { data: dataPage01 } = useQuery<IGetMoviesResult>(
-		['movies', 'page01'],
-		() => getMovies(1)
-	);
 
-	const { data: dataPage02, isLoading: isData02Loading } =
-		useQuery<IGetMoviesResult>(['movies', 'page02'], () => getMovies(2));
-
-	const { data: dataPage04 } = useQuery<IGetMoviesResult>(
-		['movies', 'page04'],
-		() => getMovies(4)
-	);
-
-	const { data: dataPage07 } = useQuery<IGetMoviesResult>(
-		['movies', 'page07'],
-		() => getMovies(7)
-	);
-
-	const { data: dataPage08 } = useQuery<IGetMoviesResult>(
-		['movies', 'page08'],
-		() => getMovies(8)
-	);
-
-	const { data: dataPage09 } = useQuery<IGetMoviesResult>(
-		['movies', 'page09'],
-		() => getMovies(9)
-	);
+	const dataPage01 = useMovieData(1);
+	const [dataPage02, isData02Loading] = useMovieDataStandard(2);
+	const dataPage04 = useMovieData(4);
+	const dataPage07 = useMovieData(7);
+	const dataPage08 = useMovieData(8);
+	const dataPage09 = useMovieData(9);
 
 	useEffect(() => {
 		if (overlayOpen) {

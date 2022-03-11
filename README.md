@@ -28,3 +28,8 @@
 ## 제작 기간
 
 > 22.01.16 ~ 22.01.23
+
+## Custom Hooks
+
+- useMovieData: 영화 정보만 필요할 때
+- useMovieDataStandard: 영화 정보와 로딩 정보가 필요할 때
