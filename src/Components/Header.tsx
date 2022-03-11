@@ -244,6 +244,11 @@ function Header() {
 	const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value === '') {
 			navigate(`/`);
+			const searchOpenTimeout = setTimeout(() => {
+				setSearchOpen(true);
+				var ab = 1;
+			}, 1);
+			// clearTimeout(searchOpenTimeout);
 		} else {
 			navigate(`/search?keyword=${e.target.value}`);
 		}
