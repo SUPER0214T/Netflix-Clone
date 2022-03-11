@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
 import { useMatch } from 'react-router-dom';
-import Modal from '../Components/Modal';
+import Modal from '../Components/Modal/index';
 import SliderComponent from '../Components/SliderComponent';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { overlayAtom, searchOpenAtom } from '../atoms';

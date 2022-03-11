@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
 import { useMatch } from 'react-router-dom';
-import Modal from '../Components/Modal';
+import Modal from '../Components/Modal/index';
 import { useRecoilValue } from 'recoil';
 import { overlayAtom } from '../atoms';
 import TvSlider from '../Components/TvSlider';

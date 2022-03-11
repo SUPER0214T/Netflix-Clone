@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getSearchResults, ISearchResults } from '../api';
 import { searchOverlayAtom } from '../atoms';
-import Modal from '../Components/Modal';
+import Modal from '../Components/Modal/index';
 import SearchSlider from '../Components/SearchSlider';
 
 const Wrapper = styled.div`
