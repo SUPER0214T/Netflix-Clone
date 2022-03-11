@@ -6,7 +6,7 @@ import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
 import { useMatch } from 'react-router-dom';
 import Modal from '../Components/Modal/index';
-import SliderComponent from '../Components/SliderComponent';
+import SliderComponent from '../Components/common/Slider/index';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { overlayAtom, searchOpenAtom } from '../atoms';
 import { HelmetProvider, Helmet } from 'react-helmet-async';

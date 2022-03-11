@@ -6,9 +6,9 @@ import { getMovies, IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
 import { useMatch } from 'react-router-dom';
 import Modal from '../Components/Modal/index';
+import SliderComponent from '../Components/common/Slider/index';
 import { useRecoilValue } from 'recoil';
 import { overlayAtom } from '../atoms';
-import TvSlider from '../Components/TvSlider';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 
 const Wrapper = styled.div`
@@ -137,15 +137,21 @@ function Tv() {
 						</Banner>
 
 						<div className="slider-position">
-							<TvSlider data={dataPage02} titleName="오직 넷플릭스에서" />
-							<TvSlider
+							<SliderComponent
+								data={dataPage02}
+								titleName="오직 넷플릭스에서"
+							/>
+							<SliderComponent
 								data={dataPage01}
 								titleName="평단의 찬사를 받은 시리즈"
 							/>
-							<TvSlider data={dataPage04} titleName="" />
-							<TvSlider data={dataPage07} titleName="드라마" />
-							<TvSlider data={dataPage08} titleName="할리우드 영화" />
-							<TvSlider data={dataPage09} titleName="다시보기 추천 콘텐츠" />
+							<SliderComponent data={dataPage04} titleName="" />
+							<SliderComponent data={dataPage07} titleName="드라마" />
+							<SliderComponent data={dataPage08} titleName="할리우드 영화" />
+							<SliderComponent
+								data={dataPage09}
+								titleName="다시보기 추천 콘텐츠"
+							/>
 						</div>
 					</>
 				)}
