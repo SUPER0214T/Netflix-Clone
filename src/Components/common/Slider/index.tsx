@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { IGetMoviesResult, ISearchResults } from '../../../api';
 import SliderCard from './components/SliderCard';
 import ArrowButton from './components/ArrowButton';
-import { useWindowResizeInIndex } from '../../../Hooks/useWindowResizeInIndex';
+import { useWindowResize } from './hooks/useWindowResize';
 import { SliderWrapper, Slider, Row, sliderVariants } from './styles';
 
 function SliderComponent(props: {
@@ -44,7 +44,7 @@ function SliderComponent(props: {
 		setSliderLimit(false);
 	};
 
-	useWindowResizeInIndex(setOffset);
+	useWindowResize(setOffset);
 
 	return (
 		<SliderWrapper className="slider-wrapper">

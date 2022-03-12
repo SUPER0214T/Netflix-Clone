@@ -5,8 +5,8 @@ import { useRecoilState } from 'recoil';
 import { getSearchResults, ISearchResults } from '../../api';
 import { overlayAtom } from '../../atoms';
 import Modal from '../common/modal/index';
-import SearchSlider from '../SearchSlider';
-import { useWindowResize } from '../../Hooks/useWindowResize';
+import SearchSlider from './components/SearchSlider';
+import { useWindowResize } from './hooks/useWindowResize';
 import { Wrapper } from './styles';
 
 function Search() {

@@ -7,7 +7,7 @@ import SliderComponent from '../common/slider/index';
 import { useRecoilValue } from 'recoil';
 import { overlayAtom } from '../../atoms';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
-import { useMovieData, useMovieDataStandard } from '../../Hooks/useMovieData';
+import { useMovieData, useMovieDataStandard } from '../../hooks/useMovieData';
 import { Wrapper, Loader, Banner, Info, Title, OverView } from './styles';
 
 function Tv() {
