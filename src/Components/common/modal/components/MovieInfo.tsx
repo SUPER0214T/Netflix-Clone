@@ -5,8 +5,8 @@ import {
 	IDetails,
 	IGetMovieVideo,
 	IMovies,
-} from '../../../api';
-import { makeImagePath } from '../../../utils';
+} from '../../../../api';
+import { makeImagePath } from '../../../../utils';
 import { motion } from 'framer-motion';
 
 const MovieInfoWrapper = styled.div`

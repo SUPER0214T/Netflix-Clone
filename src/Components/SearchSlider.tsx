@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { ISearchResults } from '../api';
-import SliderCard from './common/Slider/SliderCard';
+import SliderCard from './common/slider/components/SliderCard';
 
 // Components
 const Slider = styled.div`

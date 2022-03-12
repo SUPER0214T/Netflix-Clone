@@ -3,9 +3,9 @@ import { motion, Variants } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { IGetMoviesResult, ISearchResults } from '../../../api';
-import { overlayAtom } from '../../../atoms';
-import { makeImagePath } from '../../../utils';
+import { IGetMoviesResult, ISearchResults } from '../../../../api';
+import { overlayAtom } from '../../../../atoms';
+import { makeImagePath } from '../../../../utils';
 
 const Box = styled(motion.div)<{ bgimagepath: string }>`
 	background-color: black;

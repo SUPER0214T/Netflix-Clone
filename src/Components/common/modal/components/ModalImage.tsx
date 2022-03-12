@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { makeImagePath } from '../../../utils';
-import { IDetails, IMovies } from '../../../api';
+import { makeImagePath } from '../../../../utils';
+import { IDetails, IMovies } from '../../../../api';
 
 const Img = styled.div`
 	width: 100%;
