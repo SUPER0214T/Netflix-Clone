@@ -2,15 +2,15 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getMovies, IGetMoviesResult } from '../api';
-import { makeImagePath } from '../utils';
+import { getMovies, IGetMoviesResult } from '../../api';
+import { makeImagePath } from '../../utils';
 import { useMatch } from 'react-router-dom';
-import Modal from '../Components/Modal/index';
-import SliderComponent from '../Components/common/Slider/index';
+import Modal from '../common/modal/index';
+import SliderComponent from '../common/Slider/index';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { overlayAtom, searchOpenAtom } from '../atoms';
+import { overlayAtom, searchOpenAtom } from '../../atoms';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
-import { useMovieData, useMovieDataStandard } from '../Hooks/useMovieData';
+import { useMovieData, useMovieDataStandard } from '../../Hooks/useMovieData';
 
 const Wrapper = styled.div`
 	position: relative;

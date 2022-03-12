@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getMovieVideoURL, IDetails, IGetMovieVideo, IMovies } from '../../api';
-import { makeImagePath } from '../../utils';
+import {
+	getMovieVideoURL,
+	IDetails,
+	IGetMovieVideo,
+	IMovies,
+} from '../../../api';
+import { makeImagePath } from '../../../utils';
 import { motion } from 'framer-motion';
 
 const MovieInfoWrapper = styled.div`

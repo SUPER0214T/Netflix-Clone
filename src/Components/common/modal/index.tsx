@@ -12,12 +12,12 @@ import {
 	IGetMovieVideo,
 	IMovies,
 	ISearchResults,
-} from '../../api';
-import { makeImagePath } from '../../utils';
+} from '../../../api';
+import { makeImagePath } from '../../../utils';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { overlayAtom, searchOverlayAtom } from '../../atoms';
-import ModalImage from '../Modal/ModalImage';
-import MovieInfo from '../Modal/MovieInfo';
+import { overlayAtom, searchOverlayAtom } from '../../../atoms';
+import ModalImage from './ModalImage';
+import MovieInfo from './MovieInfo';
 
 const MovieModalWrapper = styled.div`
 	display: flex;

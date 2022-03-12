@@ -5,11 +5,11 @@ import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useLocation, useMatch } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getSearchResults, ISearchResults } from '../api';
-import { overlayAtom } from '../atoms';
-import Modal from '../Components/Modal/index';
-import SearchSlider from '../Components/SearchSlider';
-import { useWindowResize } from '../Hooks/useWindowResize';
+import { getSearchResults, ISearchResults } from '../../api';
+import { overlayAtom } from '../../atoms';
+import Modal from '../common/modal/index';
+import SearchSlider from '../SearchSlider';
+import { useWindowResize } from '../../Hooks/useWindowResize';
 
 const Wrapper = styled.div`
 	height: 100vh;

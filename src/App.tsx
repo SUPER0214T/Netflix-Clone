@@ -1,11 +1,11 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Header from './Components/Header';
-import Home from './Routes/Home';
-import Search from './Routes/Search';
-import Tv from './Routes/Tv';
+import Home from './Components/home/index';
+import Tv from './Components/tv/index';
+import Search from './Components/search/index';
+import Profile from './Components/profile/index';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Profile from './Routes/Profile';
 
 function App() {
 	return (
