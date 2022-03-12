@@ -2,13 +2,14 @@ import { motion } from 'framer-motion';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { useLocation, useMatch } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getSearchResults, ISearchResults } from '../api';
 import { overlayAtom } from '../atoms';
 import Modal from '../Components/Modal/index';
 import SearchSlider from '../Components/SearchSlider';
+import { useWindowResize } from '../Hooks/useWindowResize';
 
 const Wrapper = styled.div`
 	height: 100vh;
@@ -22,20 +23,9 @@ const Wrapper = styled.div`
 	}
 `;
 
-const Overlay = styled(motion.div)`
-	position: fixed;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	opacity: 0;
-	z-index: 30;
-`;
-
 function Search() {
 	const location = useLocation();
 	const [searchInputValue, setSearchInputValue] = useState('');
-	const navigate = useNavigate();
 	const [searchData, setSearchData] = useState<ISearchResults>();
 	const [isSearchDataReady, setIsSearchDataReady] = useState<boolean>(false);
 	const [overlayOpen, setOverlayOpen] = useRecoilState(overlayAtom);
@@ -51,54 +41,7 @@ function Search() {
 		}
 	}, [overlayOpen]);
 
-	const handleResize = throttle(() => {
-		const totalMovies = searchData?.results.length || 20;
-		const maxIndex = Math.floor(totalMovies / offset) - 1;
-		if (window.outerWidth >= 1400) {
-			setOffset(6);
-			setSliderIndex(maxIndex);
-		} else if (window.outerWidth >= 1100) {
-			setOffset(5);
-			setSliderIndex(maxIndex);
-		} else if (window.outerWidth >= 800) {
-			setOffset(4);
-			setSliderIndex(maxIndex);
-		} else if (window.outerWidth >= 500) {
-			setOffset(3);
-			setSliderIndex(maxIndex);
-		} else {
-			setOffset(2);
-			setSliderIndex(maxIndex);
-		}
-	}, 200);
-
-	useEffect(() => {
-		const totalMovies = searchData?.results.length || 20;
-		const maxIndex = Math.floor(totalMovies / offset) - 1;
-		if (window.outerWidth >= 1400) {
-			setOffset(6);
-			setSliderIndex(maxIndex);
-		} else if (window.outerWidth >= 1100) {
-			setOffset(5);
-			setSliderIndex(maxIndex);
-		} else if (window.outerWidth >= 800) {
-			setOffset(4);
-			setSliderIndex(maxIndex);
-		} else if (window.outerWidth >= 500) {
-			setOffset(3);
-			setSliderIndex(maxIndex);
-		} else {
-			setOffset(2);
-			setSliderIndex(maxIndex);
-		}
-	}, []);
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, []);
+	useWindowResize(searchData, offset, setOffset, setSliderIndex);
 
 	useEffect(() => {
 		const search = new URLSearchParams(location.search);

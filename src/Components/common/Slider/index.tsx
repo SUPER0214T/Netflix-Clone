@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { IGetMoviesResult, ISearchResults } from '../../../api';
 import SliderCard from './SliderCard';
 import ArrowButton from './ArrowButton';
+import { useWindowResizeInIndex } from '../../../Hooks/useWindowResizeInIndex';
 
 const SliderWrapper = styled.div`
 	margin: 3vw 0;
@@ -131,40 +132,7 @@ function SliderComponent(props: {
 		setSliderLimit(false);
 	};
 
-	const handleResize = throttle(() => {
-		if (window.outerWidth >= 1400) {
-			setOffset(6);
-		} else if (window.outerWidth >= 1100) {
-			setOffset(5);
-		} else if (window.outerWidth >= 800) {
-			setOffset(4);
-		} else if (window.outerWidth >= 500) {
-			setOffset(3);
-		} else {
-			setOffset(2);
-		}
-	}, 200);
-
-	useEffect(() => {
-		if (window.outerWidth >= 1400) {
-			setOffset(6);
-		} else if (window.outerWidth >= 1100) {
-			setOffset(5);
-		} else if (window.outerWidth >= 800) {
-			setOffset(4);
-		} else if (window.outerWidth >= 500) {
-			setOffset(3);
-		} else {
-			setOffset(2);
-		}
-	}, []);
-
-	useEffect(() => {
-		window.addEventListener('resize', handleResize);
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, []);
+	useWindowResizeInIndex(setOffset);
 
 	return (
 		<SliderWrapper className="slider-wrapper">
