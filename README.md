@@ -29,7 +29,29 @@
 
 > 22.01.16 ~ 22.01.23
 
-## Custom Hooks
+# Refactoring
+
+## 디렉토리 재설정
+
+- 한 번만 사용되는 Custom Hooks는 사용하는 컴포넌트 폴더의 hooks폴더 안에 보관
+
+- 두 번 이상 사용되는 Custom Hooks는 src/hooks 폴더 안에 보관
+
+- 두 번 이상 사용되는 컴포넌트는 src/Components/common 폴더 안에 보관
+
+- 컴포넌트의 styled-components를 styles.ts 파일로 분리
+
+> 좌: 디렉토리 재설정 전
+
+> 우: 디렉토리 재설정 후
+
+![디렉토리 재설정 전](https://user-images.githubusercontent.com/83449231/158019370-ae95398e-789d-466a-9e1a-f8f378b981d1.png)
+![디렉토리 재설정 후](https://user-images.githubusercontent.com/83449231/158019504-ff237a5f-deb6-4cc3-86d8-6427b247dddb.png)
+
+### Custom Hooks
 
 - useMovieData: 영화 정보만 필요할 때
+
 - useMovieDataStandard: 영화 정보와 로딩 정보가 필요할 때
+
+- useWindowResize: 창의 크기가 변경될 때마다 Slider의 영화 개수를 설정
