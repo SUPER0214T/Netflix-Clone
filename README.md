@@ -1,6 +1,6 @@
 # NETFLIX CLONE CODING
 
-## [해당 프로젝트 주소](https://superpet21.github.io/Netflix-Clone/#/profile)
+## [해당 프로젝트 주소](https://super0214t.github.io/Netflix-Clone/#)
 
 ## 목적
 
